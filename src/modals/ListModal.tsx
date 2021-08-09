@@ -2,7 +2,6 @@ import { useState, Fragment } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 
 import { useThemeConfig } from "../hooks/useThemeConfig";
-import { useContractTransaction } from "../hooks/useContractTransaction";
 import { Button } from "../components/Button";
 import { ListParamsType, ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
@@ -19,10 +18,16 @@ const ListModalContent = ({
   tokenId: string;
   listParams?: ListParamsType;
 }) => {
-  const { owned, approved, input, handleCreateAuction, handleApprove } =
-    useListInteraction(setError, tokenContract, tokenId, listParams);
-  const { getString } = useThemeConfig();
-  const { txInProgress } = useContractTransaction();
+  const {
+    owned,
+    approved,
+    input,
+    handleCreateAuction,
+    handleApprove,
+    listInProgress,
+    approveInProgress,
+  } = useListInteraction(setError, tokenContract, tokenId, listParams);
+  const { getString, getStyles } = useThemeConfig();
 
   if (!owned) {
     return (
@@ -36,25 +41,33 @@ const ListModalContent = ({
   return (
     <span>
       <Fragment>
-        <h3>{getString("LIST_MEDIA_HEADER")}</h3>
-        <p>{getString("LIST_MEDIA_DESCRIPTION")}</p>
+        <h3 {...getStyles("modalHeader")}>{getString("LIST_MEDIA_HEADER")}</h3>
+        <p {...getStyles("modalDescription")}>
+          {getString("LIST_MEDIA_DESCRIPTION")}
+        </p>
         {approved ? (
           <Fragment>
             {input}
-            <Button onClick={handleCreateAuction} showPending={true}>
-              {txInProgress
+            <Button onClick={handleCreateAuction} disabled={listInProgress}>
+              {listInProgress
                 ? getString("BUTTON_TXN_PENDING")
                 : getString("LIST_MEDIA_BUTTON_TEXT")}
             </Button>
-            <p>{getString("SET_RESERVE_PRICE_DESCRIPTION")}</p>
+            <p {...getStyles("modalDescription")}>
+              {getString("SET_RESERVE_PRICE_DESCRIPTION")}
+            </p>
           </Fragment>
         ) : (
           <Fragment>
-            <p>To list this NFT, it first needs to be approved by </p>
-            <p>the Zora auction house</p>
+            <p {...getStyles("modalDescription")}>
+              {getString("LIST_NFT_APPROVE_P1")}
+            </p>
+            <p {...getStyles("modalDescription")}>
+              {getString("LIST_NFT_APPROVE_P2")}
+            </p>
 
-            <Button onClick={handleApprove} showPending={true}>
-              {txInProgress
+            <Button onClick={handleApprove} disabled={approveInProgress}>
+              {approveInProgress
                 ? getString("BUTTON_TXN_PENDING")
                 : getString("APPROVE_AUCTION_BUTTON_TEXT")}
             </Button>

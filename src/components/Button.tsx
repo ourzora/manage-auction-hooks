@@ -1,19 +1,11 @@
-import { useContractTransaction } from "../hooks/useContractTransaction";
 import { useThemeConfig } from "../hooks/useThemeConfig";
 
 export const Button = ({ showPending, disabled, ...props }: any) => {
-  const { getStyles, getString } = useThemeConfig();
-  const { txInProgress } = useContractTransaction();
+  const { getStyles } = useThemeConfig();
 
   return (
-    <button
-      {...props}
-      disabled={disabled || txInProgress}
-      {...getStyles("actionButton")}
-    >
-      {txInProgress && showPending
-        ? getString("BUTTON_TXN_PENDING")
-        : props.children}
+    <button {...props} disabled={disabled} {...getStyles("actionButton")}>
+      props.children
     </button>
   );
 };

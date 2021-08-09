@@ -8,6 +8,8 @@ import { useThemeConfig } from "../hooks/useThemeConfig";
 import { useEthAmountInput } from "../components/useEthAmountInput";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { addressesMatch } from "../utils/addresses";
+import { ActionType } from "../types";
+import { useContractTransaction } from "./useContractTransaction";
 
 export const useManageInteraction = (
   auction: Auction,
@@ -16,6 +18,12 @@ export const useManageInteraction = (
   const { getString } = useThemeConfig();
   const { account } = useWeb3Wallet();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
+
+  const { handleTx: handleCancelTx, txInProgress: cancelInProgress } =
+    useContractTransaction(ActionType.CANCEL_AUCTION);
+  const { handleTx: handleSetReserveTx, txInProgress: setReserveInProgress } =
+    useContractTransaction(ActionType.UPDATE_RESERVE);
+
   const { ethValue, input } = useEthAmountInput({
     hasMinPrecision: true,
     label: getString("UPDATE_RESERVE_PRICE_PRICE_LABEL"),
@@ -28,7 +36,7 @@ export const useManageInteraction = (
       return;
     }
     try {
-      await auctionHouse?.cancelAuction(auctionId);
+      await handleCancelTx(auctionHouse?.cancelAuction(auctionId));
     } catch (error) {
       console.error(error);
       setError(`Error cancelling auction: ${error.message}`);
@@ -43,9 +51,8 @@ export const useManageInteraction = (
     }
     if (ethValue) {
       try {
-        await auctionHouse?.setAuctionReservePrice(
-          auctionId,
-          parseEther(ethValue)
+        await handleSetReserveTx(
+          auctionHouse?.setAuctionReservePrice(auctionId, parseEther(ethValue))
         );
       } catch (error) {
         console.error(error);
@@ -63,7 +70,9 @@ export const useManageInteraction = (
   return {
     isTokenOwner,
     handleUpdateReservePrice,
+    setReserveInProgress,
     handleCancelAuction,
+    cancelInProgress,
     input,
     ethValue,
   };

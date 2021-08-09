@@ -11,6 +11,7 @@ import { useEthAmountInput } from "../components/useEthAmountInput";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useTokenApproval } from "../hooks/useTokenApproval";
 import { ActionType, ListParamsType } from "../types";
+import { useContractTransaction } from "./useContractTransaction";
 
 const DefaultListParams = {
   curatorAddress: AddressZero,
@@ -28,7 +29,7 @@ export const useListInteraction = (
 ) => {
   const { account, chainId } = useWeb3Wallet();
   const { getString } = useThemeConfig();
-  const { auctionHouse, afterActionCallback } = useAuctionHouseHooksContext();
+  const { auctionHouse } = useAuctionHouseHooksContext();
 
   const auctionHouseAddress = chainId === 1 ? mainnetAuction : rinkebyAuction;
   const { approved, owned, approve, loadApproval } = useTokenApproval(
@@ -36,6 +37,11 @@ export const useListInteraction = (
     tokenId,
     auctionHouseAddress.auctionHouse
   );
+
+  const { handleTx: handleApproveTx, txInProgress: approveInProgress } =
+    useContractTransaction(ActionType.APPROVE);
+  const { handleTx: handleListTx, txInProgress: listInProgress } =
+    useContractTransaction(ActionType.LIST);
 
   const { ethValue, input } = useEthAmountInput({
     hasMinPrecision: true,
@@ -49,16 +55,17 @@ export const useListInteraction = (
       return;
     }
     try {
-      await auctionHouse?.createAuction(
-        tokenId,
-        listParams.duration,
-        parseEther(ethValue),
-        listParams.curatorAddress,
-        listParams.curatorPercentage,
-        listParams.currencyAddress,
-        tokenContract
+      await handleListTx(
+        auctionHouse?.createAuction(
+          tokenId,
+          listParams.duration,
+          parseEther(ethValue),
+          listParams.curatorAddress,
+          listParams.curatorPercentage,
+          listParams.currencyAddress,
+          tokenContract
+        )
       );
-      afterActionCallback(ActionType.LIST);
     } catch (error) {
       console.error(error);
       setError(
@@ -69,9 +76,8 @@ export const useListInteraction = (
 
   const handleApprove = useCallback(async () => {
     try {
-      await approve();
+      await handleApproveTx(approve());
       await loadApproval();
-      afterActionCallback(ActionType.APPROVE);
     } catch (error) {
       setError(
         `${getString("ERROR_APPROVING_TOKEN_PREFIX")} ${error.messages}`
@@ -81,7 +87,9 @@ export const useListInteraction = (
 
   return {
     handleApprove,
+    approveInProgress,
     handleCreateAuction,
+    listInProgress,
     owned,
     approved,
     input,

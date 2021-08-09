@@ -9,6 +9,8 @@ import { useEthAmountInput } from "../components/useEthAmountInput";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { BigNumber, BigNumberish } from "ethers";
 import { getNextMinBid } from "../utils/bidInfo";
+import { ActionType } from "../types";
+import { useContractTransaction } from "./useContractTransaction";
 
 export const useBidInteraction = (
   auction: Auction,
@@ -17,6 +19,8 @@ export const useBidInteraction = (
   const { account, library } = useWeb3Wallet();
   const { getString } = useThemeConfig();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
+  const { handleTx: handleBidTx, txInProgress: bidInProgress } =
+    useContractTransaction(ActionType.PLACE_BID);
 
   const [userBalance, setUserBalance] = useState<BigNumberish | undefined>(
     undefined
@@ -72,7 +76,9 @@ export const useBidInteraction = (
       return;
     }
     try {
-      await auctionHouse?.createBid(auctionId, parseEther(ethValue));
+      await handleBidTx(
+        auctionHouse?.createBid(auctionId, parseEther(ethValue))
+      );
     } catch (error) {
       console.error(error);
       setError(`${getString("ERROR_PLACING_BID_PREFIX")}: ${error.message}`);
@@ -81,6 +87,7 @@ export const useBidInteraction = (
 
   return {
     bidTooLow,
+    bidInProgress,
     userHasEnough,
     input,
     minBid,

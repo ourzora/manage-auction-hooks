@@ -4,7 +4,6 @@ import { Auction } from "@zoralabs/zdk";
 
 import { useAuctionInformation } from "../hooks/useAuctionInformation";
 import { useThemeConfig } from "../hooks/useThemeConfig";
-import { useContractTransaction } from "../hooks/useContractTransaction";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
@@ -17,37 +16,43 @@ const ManageModalContent = ({
   auction: Auction;
   setError: (err: string | undefined) => void;
 }) => {
-  const { getString } = useThemeConfig();
-  const { txInProgress } = useContractTransaction();
+  const { getString, getStyles } = useThemeConfig();
   const {
     isTokenOwner,
     handleCancelAuction,
     handleUpdateReservePrice,
     input,
     ethValue,
+    cancelInProgress,
+    setReserveInProgress,
   } = useManageInteraction(auction, setError);
 
   return (
     <span>
       {isTokenOwner ? (
         <Fragment>
-          <h3>{getString("MANAGE_MEDIA_HEADER")}</h3>
-          <p>{getString("CANCEL_AUCTION")}</p>
-          <Button onClick={handleCancelAuction} showPending={true}>
-            {txInProgress
+          <h3 {...getStyles("modalHeader")}>
+            {getString("MANAGE_MEDIA_HEADER")}
+          </h3>
+          <p {...getStyles("modalDescription")}>
+            {getString("CANCEL_AUCTION")}
+          </p>
+          <Button onClick={handleCancelAuction} disabled={cancelInProgress}>
+            {cancelInProgress
               ? getString("BUTTON_TXN_PENDING")
               : getString("CANCEL_AUCTION_BUTTON_TEXT")}
           </Button>
-          <p>{getString("SET_RESERVE_PRICE_DESCRIPTION")}</p>
-          <div>
+          <p {...getStyles("modalDescription")}>
+            {getString("SET_RESERVE_PRICE_DESCRIPTION")}
+          </p>
+          <div {...getStyles("updateReserveContainer")}>
             {input}
             <div>
               <Button
                 onClick={handleUpdateReservePrice}
-                disabled={!ethValue}
-                showPending={true}
+                disabled={!ethValue || setReserveInProgress}
               >
-                {txInProgress
+                {setReserveInProgress
                   ? getString("BUTTON_TXN_PENDING")
                   : getString("SET_RESERVE_PRICE_BUTTON_TEXT")}
               </Button>

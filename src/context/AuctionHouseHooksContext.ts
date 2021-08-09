@@ -1,7 +1,6 @@
 import { createContext } from "react";
 import { Strings, Theme } from "../constants";
 import type {
-  ActionType,
   AuctionHouseHooksContextType,
   ListingRequestType,
 } from "../types";
@@ -19,5 +18,4 @@ export const AuctionHouseHooksContext =
     auctionId: null,
     auctionHouse: null,
     listingRequestInformation: null,
-    afterActionCallback: (_action: ActionType) => {},
   });

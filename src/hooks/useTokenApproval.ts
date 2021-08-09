@@ -33,7 +33,7 @@ export function useTokenApproval(
 
   useEffect(() => {
     loadApproval();
-  }, [account, spender]);
+  }, [account, tokenId, spender, contract]);
 
   function approve(): Promise<ContractTransaction> {
     if (!contract || !spender) {

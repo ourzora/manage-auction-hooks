@@ -1,40 +1,52 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { ContractTransaction } from "@ethersproject/contracts";
+import { ActionType, WalletCallStatus } from "../types";
+import { TransactionActionContext } from "src/context/TransactionActionContext";
 
-export enum WalletCallStatus {
-  INITIAL = "INITIAL",
-  PROMPTED = "PROMPTED",
-  CONFIRMING = "CONFIRMING",
-  CONFIRMED = "CONFIRMED",
-  ERRORED = "ERRORED",
-}
-
-export function useContractTransaction(confirmations: number = 6) {
-  const [txStatus, setState] = useState<WalletCallStatus>(
-    WalletCallStatus.INITIAL
+export function useContractTransaction(
+  action: ActionType,
+  confirmations: number = 6
+) {
+  const { setCurrentAction, currentAction, afterActionCallback } = useContext(
+    TransactionActionContext
   );
-  const [txError, setError] = useState<Error | undefined>();
 
   async function handleTx(promise: Promise<ContractTransaction>) {
     try {
-      setState(WalletCallStatus.PROMPTED);
+      setCurrentAction({
+        state: WalletCallStatus.PROMPTED,
+        type: action,
+        isWaiting: true,
+      });
       const tx = await promise;
-      setState(WalletCallStatus.CONFIRMING);
+      setCurrentAction({
+        state: WalletCallStatus.CONFIRMING,
+        type: action,
+        isWaiting: true,
+      });
       await tx.wait(confirmations);
-      setState(WalletCallStatus.CONFIRMED);
+      setCurrentAction({
+        state: WalletCallStatus.CONFIRMED,
+        type: action,
+        isWaiting: false,
+      });
+      afterActionCallback(action);
       // txn confirmed
       // todo reload page???
       return tx;
     } catch (e) {
-      setError(e.message);
-      setState(WalletCallStatus.ERRORED);
+      setCurrentAction({
+        state: WalletCallStatus.ERRORED,
+        type: action,
+        isWaiting: false,
+        error: e.message,
+      });
       throw e;
     }
   }
 
   const txInProgress =
-    txStatus === WalletCallStatus.CONFIRMING ||
-    txStatus === WalletCallStatus.PROMPTED;
+    currentAction?.isWaiting && currentAction?.type === action;
 
-  return { txStatus, txInProgress, txError, handleTx };
+  return { txInProgress, handleTx };
 }

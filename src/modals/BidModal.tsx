@@ -23,14 +23,16 @@ const BidModalContent = ({
   auction: Auction;
   setError: (err: string | undefined) => void;
 }) => {
-  const { getString } = useThemeConfig();
-  const { input, userHasEnough, minBid, bidTooLow, handleBid } =
+  const { getString, getStyles } = useThemeConfig();
+  const { input, userHasEnough, bidInProgress, minBid, bidTooLow, handleBid } =
     useBidInteraction(auction, setError);
 
   return (
     <Fragment>
-      <h3>{getString("PLACE_BID_HEADER")}</h3>
-      <p>{getString("PLACE_BID_DESCRIPTION")}</p>
+      <h3 {...getStyles("modalHeader")}>{getString("PLACE_BID_HEADER")}</h3>
+      <p {...getStyles("modalDescription")}>
+        {getString("PLACE_BID_DESCRIPTION")}
+      </p>
       <p>
         {auction.amount.eq(0)
           ? formatAmount(
@@ -49,10 +51,11 @@ const BidModalContent = ({
         </div>
         <Button
           onClick={handleBid}
-          disabled={!userHasEnough || bidTooLow}
-          showPending={true}
+          disabled={!userHasEnough || bidTooLow || bidInProgress}
         >
-          {getString("BID_BUTTON_TEXT")}
+          {bidInProgress
+            ? getString("BUTTON_TXN_PENDING")
+            : getString("BID_BUTTON_TEXT")}
         </Button>
       </div>
     </Fragment>

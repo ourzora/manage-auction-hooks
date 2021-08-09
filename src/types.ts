@@ -5,7 +5,6 @@ import { ReactElement } from "react";
 export type AuctionHouseHooksContextType = {
   theme: typeof Theme;
   strings: typeof Strings;
-  afterActionCallback: (_action: ActionType) => void;
   auctionId: number | null;
   setAuctionId: (auctionId: number | null) => void;
   listingRequestInformation: ListingRequestType | null;
@@ -40,4 +39,25 @@ export enum ActionType {
   UPDATE_RESERVE = "UPDATE_RESERVE",
   CANCEL_AUCTION = "CANCEL_AUCTION",
   PLACE_BID = "PLACE_BID",
+}
+
+export type ActionInfo = {
+  type: ActionType;
+  state: WalletCallStatus;
+  isWaiting: boolean;
+  error?: Error;
+};
+
+export type TransactionActionContextType = {
+  currentAction: ActionInfo | null;
+  setCurrentAction: (actionInfo: ActionInfo | null) => void;
+  afterActionCallback: (actionType: ActionType) => void;
+};
+
+export enum WalletCallStatus {
+  INITIAL = "INITIAL",
+  PROMPTED = "PROMPTED",
+  CONFIRMING = "CONFIRMING",
+  CONFIRMED = "CONFIRMED",
+  ERRORED = "ERRORED",
 }

@@ -22,6 +22,11 @@ export const Theme = {
   modalInner: css`
     background: white;
   `,
+  modalHeader: css`
+    font-size: 1.4em;
+  `,
+  modalDescription: css``,
+  updateReserveContainer: css``,
 };
 
 export const Strings = {
@@ -79,4 +84,7 @@ export const Strings = {
   UPDATE_RESERVE_PRICE_PRICE_LABEL: "New reserve price in ETH",
   MANAGE_MODAL_LOADING_PROMPT: "Loading auction...",
   SET_RESERVE_PRICE_BUTTON_TEXT: "Set new reserve price",
+
+  LIST_NFT_APPROVE_P1: "To list this NFT, it first needs to be approved by ",
+  LIST_NFT_APPROVE_P2: "the Zora auction house",
 };
