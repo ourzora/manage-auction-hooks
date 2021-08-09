@@ -11,6 +11,9 @@ import { useEthAmountInput } from "../components/useEthAmountInput";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
+import { useTokenApproval } from "src/hooks/useTokenApproval";
+import rinkebyAuction from "@zoralabs/auction-house/dist/addresses/4.json";
+import mainnetAuction from "@zoralabs/auction-house/dist/addresses/1.json";
 
 const ListModalContent = ({
   setError,
@@ -21,10 +24,18 @@ const ListModalContent = ({
   tokenContract: string;
   tokenId: string;
 }) => {
-  const { account } = useWeb3Wallet();
+  const { account, chainId } = useWeb3Wallet();
   const { getString } = useThemeConfig();
   const { txInProgress } = useContractTransaction();
   const { auctionHouse } = useAuctionHouseHooksContext();
+
+  const auctionHouseAddress = chainId === 1 ? mainnetAuction : rinkebyAuction;
+  const { approved, owned, approve, loadApproval } = useTokenApproval(
+    tokenContract,
+    tokenId,
+    auctionHouseAddress.auctionHouse
+  );
+
   const { ethValue, input } = useEthAmountInput({
     hasMinPrecision: true,
     label: getString("LIST_SET_RESERVE_PRICE_LABEL"),
@@ -54,18 +65,53 @@ const ListModalContent = ({
     }
   }, [setError, tokenContract, tokenId, auctionHouse, ethValue, account]);
 
+  const handleApprove = useCallback(async () => {
+    try {
+      await approve();
+      await loadApproval();
+    } catch (error) {
+      setError(
+        `${getString("ERROR_APPROVING_TOKEN_PREFIX")} ${error.messages}`
+      );
+    }
+  }, [auctionHouseAddress, approve, loadApproval]);
+
+  if (!owned) {
+    return (
+      <Fragment>
+        <h3>{getString("LIST_MODAL_NOT_OWNED")}</h3>
+        <p>{getString("LIST_MODAL_NOT_OWNED_TEXT")}</p>
+      </Fragment>
+    );
+  }
+
   return (
     <span>
       <Fragment>
         <h3>{getString("LIST_MEDIA_HEADER")}</h3>
         <p>{getString("LIST_MEDIA_DESCRIPTION")}</p>
-        {input}
-        <Button onClick={handleCancelAuction} showPending={true}>
-          {txInProgress
-            ? getString("BUTTON_TXN_PENDING")
-            : getString("LIST_MEDIA_BUTTON_TEXT")}
-        </Button>
-        <p>{getString("SET_RESERVE_PRICE_DESCRIPTION")}</p>
+        {approved ? (
+          <Fragment>
+            {input}
+            <Button onClick={handleCancelAuction} showPending={true}>
+              {txInProgress
+                ? getString("BUTTON_TXN_PENDING")
+                : getString("LIST_MEDIA_BUTTON_TEXT")}
+            </Button>
+            <p>{getString("SET_RESERVE_PRICE_DESCRIPTION")}</p>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <p>To list this NFT, it first needs to be approved by </p>
+            <p>the Zora auction house</p>
+
+            <Button onClick={handleApprove} showPending={true}>
+              {txInProgress
+                ? getString("BUTTON_TXN_PENDING")
+                : getString("APPROVE_AUCTION_BUTTON_TEXT")}
+            </Button>
+          </Fragment>
+        )}
       </Fragment>
     </span>
   );

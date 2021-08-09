@@ -48,8 +48,14 @@ export const Strings = {
 
   ERROR_PLACING_BID_PREFIX: "Error placing bid: ",
   ERROR_CREATING_AUCTION_PREFIX: "Error creating auction: ",
+  ERROR_APPROVING_TOKEN_PREFIX: "Error approving NFT for auction: ",
 
   BID_BUTTON_TEXT: "Bid",
+  APPROVE_AUCTION_BUTTON_TEXT: "Approve",
+
+  LIST_MODAL_NOT_OWNED: "Token not owned",
+  LIST_MODAL_NOT_OWNED_TEXT:
+    "To list this token on the auction house you need to be the owner.",
 
   MANAGE_MEDIA_HEADER: "Manage Media",
   CANCEL_AUCTION: (
