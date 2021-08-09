@@ -1,19 +1,12 @@
-import { useState, useCallback, Fragment } from "react";
+import { useState, Fragment } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
-import { parseEther } from "@ethersproject/units";
-import { AddressZero } from "@ethersproject/constants";
-
-import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
 
 import { useThemeConfig } from "../hooks/useThemeConfig";
 import { useContractTransaction } from "../hooks/useContractTransaction";
-import { useEthAmountInput } from "../components/useEthAmountInput";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
-import { useTokenApproval } from "../hooks/useTokenApproval";
-import rinkebyAuction from "@zoralabs/auction-house/dist/addresses/4.json";
-import mainnetAuction from "@zoralabs/auction-house/dist/addresses/1.json";
+import { useListInteraction } from "../hooks/useListInteraction";
 
 const ListModalContent = ({
   setError,
@@ -24,57 +17,10 @@ const ListModalContent = ({
   tokenContract: string;
   tokenId: string;
 }) => {
-  const { account, chainId } = useWeb3Wallet();
+  const { owned, approved, input, handleCreateAuction, handleApprove } =
+    useListInteraction(setError, tokenContract, tokenId);
   const { getString } = useThemeConfig();
   const { txInProgress } = useContractTransaction();
-  const { auctionHouse } = useAuctionHouseHooksContext();
-
-  const auctionHouseAddress = chainId === 1 ? mainnetAuction : rinkebyAuction;
-  const { approved, owned, approve, loadApproval } = useTokenApproval(
-    tokenContract,
-    tokenId,
-    auctionHouseAddress.auctionHouse
-  );
-
-  const { ethValue, input } = useEthAmountInput({
-    hasMinPrecision: true,
-    label: getString("LIST_SET_RESERVE_PRICE_LABEL"),
-  });
-
-  const handleCancelAuction = useCallback(async () => {
-    setError(undefined);
-    if (!tokenContract || !tokenId || !auctionHouse || !ethValue || !account) {
-      setError("No auction found");
-      return;
-    }
-    try {
-      await auctionHouse?.createAuction(
-        tokenId,
-        60 * 60 * 24,
-        parseEther(ethValue),
-        account,
-        0,
-        AddressZero,
-        tokenContract
-      );
-    } catch (error) {
-      console.error(error);
-      setError(
-        `${getString("ERROR_CREATING_AUCTION_PREFIX")} ${error.message}`
-      );
-    }
-  }, [setError, tokenContract, tokenId, auctionHouse, ethValue, account]);
-
-  const handleApprove = useCallback(async () => {
-    try {
-      await approve();
-      await loadApproval();
-    } catch (error) {
-      setError(
-        `${getString("ERROR_APPROVING_TOKEN_PREFIX")} ${error.messages}`
-      );
-    }
-  }, [auctionHouseAddress, approve, loadApproval]);
 
   if (!owned) {
     return (
@@ -93,7 +39,7 @@ const ListModalContent = ({
         {approved ? (
           <Fragment>
             {input}
-            <Button onClick={handleCancelAuction} showPending={true}>
+            <Button onClick={handleCreateAuction} showPending={true}>
               {txInProgress
                 ? getString("BUTTON_TXN_PENDING")
                 : getString("LIST_MEDIA_BUTTON_TEXT")}
