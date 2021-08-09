@@ -14,6 +14,7 @@ export const Theme = {
     font-family: inherit;
     padding: 4px;
     font-size: 1.2em;
+    margin-top: 12px;
   `,
   ethAmountLabel: css`
     margin: 4px;

@@ -5,7 +5,7 @@ export const Button = ({ showPending, disabled, ...props }: any) => {
 
   return (
     <button {...props} disabled={disabled} {...getStyles("actionButton")}>
-      props.children
+      {props.children}
     </button>
   );
 };

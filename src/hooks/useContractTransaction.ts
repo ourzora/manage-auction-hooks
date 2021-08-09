@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { ContractTransaction } from "@ethersproject/contracts";
 import { ActionType, WalletCallStatus } from "../types";
-import { TransactionActionContext } from "src/context/TransactionActionContext";
+import { TransactionActionContext } from "../context/TransactionActionContext";
 
 export function useContractTransaction(
   action: ActionType,
-  confirmations: number = 6
+  confirmations: number = 1
 ) {
   const { setCurrentAction, currentAction, afterActionCallback } = useContext(
     TransactionActionContext
@@ -33,6 +33,7 @@ export function useContractTransaction(
       afterActionCallback(action);
       // txn confirmed
       // todo reload page???
+      console.log('transaction completed');
       return tx;
     } catch (e) {
       setCurrentAction({

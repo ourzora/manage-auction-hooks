@@ -8,7 +8,7 @@ import { ManageModal } from "../modals/ManageModal";
 import { ListingRequestType, RenderMediaType } from "../types";
 import { BidModal } from "../modals/BidModal";
 import { ListModal } from "../modals/ListModal";
-import { ProvideTransactionContext } from "src/context/ProvideTransactionContext";
+import { ProvideTransactionContext } from "../context/ProvideTransactionContext";
 
 type AuctionManagerProps = {
   theme?: Partial<typeof Theme>;
