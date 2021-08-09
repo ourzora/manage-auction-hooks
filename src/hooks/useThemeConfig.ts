@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { css } from "@emotion/css";
-import { AuctionHouseHooksContext, } from "../config";
+import { AuctionHouseHooksContext } from "../config";
 import { Theme, Strings } from "../constants";
 
 type ThemeType = typeof Theme;

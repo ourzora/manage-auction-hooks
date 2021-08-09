@@ -7,7 +7,7 @@ export const AuctionHouseHooksContext =
     theme: Theme,
     strings: Strings,
     setAuctionId: (_name: number | null) => {
-      throw new Error('Missing Auction House Hooks provider')
+      throw new Error("Missing Auction House Hooks provider");
     },
     auctionId: null,
     auctionHouse: null,

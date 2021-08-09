@@ -1,12 +1,12 @@
 import { Strings, Theme } from "./constants";
-import type {AuctionHouse} from '@zoralabs/zdk';
+import type { AuctionHouse } from "@zoralabs/zdk";
 
 export type AuctionHouseHooksContextType = {
   theme: typeof Theme;
   strings: typeof Strings;
   auctionId: number | null;
   setAuctionId: (auctionId: number | null) => void;
-  auctionHouse: InstanceType<typeof AuctionHouse> | null,
+  auctionHouse: InstanceType<typeof AuctionHouse> | null;
 };
 
 export enum ModalType {
