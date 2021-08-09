@@ -24,10 +24,10 @@ export function useTokenApproval(
 
   const loadApproval = useCallback(async () => {
     setIsApproved(undefined);
-    // TODO(iain): add error
-    if (account && spender && contract && tokenId) {
-      setIsOwned(addressesMatch(await contract?.ownerOf(tokenId), account));
-      setIsApproved(await contract?.isApprovedForAll(account, spender));
+    // TODO(iain): add error reporting
+    if (account && spender && contract && tokenId !== undefined) {
+      setIsOwned(addressesMatch(await contract.ownerOf(tokenId), account));
+      setIsApproved(await contract.isApprovedForAll(account, spender));
     }
   }, [contract, setIsApproved, account, spender]);
 
