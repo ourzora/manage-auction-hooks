@@ -1,9 +1,10 @@
 # simple wallet provider
 
-set of react hooks and components for an easy wallet login flow
+set of react hooks and components for easy whitelabeled auction interactions
 
 run example: 
 `sh example/run.sh`
 
 example preview:
-![example.png](./example.png)
+![example0.png](./example0.png)
+![example1.png](./example1.png)
