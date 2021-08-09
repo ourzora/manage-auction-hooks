@@ -4,7 +4,7 @@ import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/M
 import { useThemeConfig } from "../hooks/useThemeConfig";
 import { useContractTransaction } from "../hooks/useContractTransaction";
 import { Button } from "../components/Button";
-import { ModalType } from "../types";
+import { ListParamsType, ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useListInteraction } from "../hooks/useListInteraction";
 
@@ -12,13 +12,15 @@ const ListModalContent = ({
   setError,
   tokenContract,
   tokenId,
+  listParams,
 }: {
   setError: (err: string | undefined) => void;
   tokenContract: string;
   tokenId: string;
+  listParams?: ListParamsType;
 }) => {
   const { owned, approved, input, handleCreateAuction, handleApprove } =
-    useListInteraction(setError, tokenContract, tokenId);
+    useListInteraction(setError, tokenContract, tokenId, listParams);
   const { getString } = useThemeConfig();
   const { txInProgress } = useContractTransaction();
 
@@ -63,7 +65,7 @@ const ListModalContent = ({
   );
 };
 
-export const ListModal = () => {
+export const ListModal = ({ listParams }: { listParams?: ListParamsType }) => {
   const { getString, getStyles } = useThemeConfig();
   const [error, setError] = useState<string | undefined>(undefined);
   const { renderMedia: RenderMedia, listingRequestInformation } =
@@ -90,6 +92,7 @@ export const ListModal = () => {
           <ListModalContent
             {...listingRequestInformation}
             setError={setError}
+            listParams={listParams}
           />
         </div>
       ) : (

@@ -13,6 +13,13 @@ export type AuctionHouseHooksContextType = {
   renderMedia?: RenderMediaType;
 };
 
+export type ListParamsType = {
+  curatorAddress: string;
+  curatorPercentage: number;
+  currencyAddress: string;
+  duration: number;
+};
+
 export type RenderMediaType = (props: any) => ReactElement;
 
 export type ListingRequestType = null | {

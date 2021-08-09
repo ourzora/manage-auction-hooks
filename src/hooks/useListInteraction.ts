@@ -3,18 +3,28 @@ import { parseEther } from "@ethersproject/units";
 import { AddressZero } from "@ethersproject/constants";
 
 import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
+import rinkebyAuction from "@zoralabs/auction-house/dist/addresses/4.json";
+import mainnetAuction from "@zoralabs/auction-house/dist/addresses/1.json";
 
 import { useThemeConfig } from "../hooks/useThemeConfig";
 import { useEthAmountInput } from "../components/useEthAmountInput";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useTokenApproval } from "../hooks/useTokenApproval";
-import rinkebyAuction from "@zoralabs/auction-house/dist/addresses/4.json";
-import mainnetAuction from "@zoralabs/auction-house/dist/addresses/1.json";
+import { ListParamsType } from "../types";
+
+const DefaultListParams = {
+  curatorAddress: AddressZero,
+  curatorPercentage: 0,
+  currencyAddress: AddressZero,
+  // 60 sec in a min, 60 min in an hour 24 hour in a day = 1 day
+  duration: 60 * 60 * 24,
+};
 
 export const useListInteraction = (
   setError: (err: string | undefined) => void,
   tokenContract: string,
-  tokenId: string
+  tokenId: string,
+  listParams: ListParamsType = DefaultListParams
 ) => {
   const { account, chainId } = useWeb3Wallet();
   const { getString } = useThemeConfig();
@@ -41,11 +51,11 @@ export const useListInteraction = (
     try {
       await auctionHouse?.createAuction(
         tokenId,
-        60 * 60 * 24,
+        listParams.duration,
         parseEther(ethValue),
-        account,
-        0,
-        AddressZero,
+        listParams.curatorAddress,
+        listParams.curatorPercentage,
+        listParams.currencyAddress,
         tokenContract
       );
     } catch (error) {

@@ -8,7 +8,7 @@ import { useContractTransaction } from "../hooks/useContractTransaction";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
-import { useManageInteraction } from "src/hooks/useManageInteraction";
+import { useManageInteraction } from "../hooks/useManageInteraction";
 
 const ManageModalContent = ({
   auction,
