@@ -11,7 +11,7 @@ import { useEthAmountInput } from "../components/useEthAmountInput";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
-import { useTokenApproval } from "src/hooks/useTokenApproval";
+import { useTokenApproval } from "../hooks/useTokenApproval";
 import rinkebyAuction from "@zoralabs/auction-house/dist/addresses/4.json";
 import mainnetAuction from "@zoralabs/auction-house/dist/addresses/1.json";
 
@@ -136,7 +136,7 @@ export const ListModal = () => {
       error={error}
       modalTitle={getString("MODAL_TITLE_LIST_PIECE")}
       modalDescription={getString("MODAL_DESCRIPTION_LIST_PIECE")}
-      modalName={ModalType.MANAGE_MODAL as string}
+      modalName={ModalType.LIST_MODAL as string}
     >
       {listingRequestInformation ? (
         <div {...getStyles("modalInner")}>

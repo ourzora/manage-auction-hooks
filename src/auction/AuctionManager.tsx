@@ -5,7 +5,9 @@ import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
 import { AuctionHouseHooksContext } from "../context/AuctionHouseHooksContext";
 import { Theme, Strings } from "../constants";
 import { ManageModal } from "../modals/ManageModal";
-import { ListingRequestType, RenderMediaType } from "src/types";
+import { ListingRequestType, RenderMediaType } from "../types";
+import { BidModal } from "../modals/BidModal";
+import { ListModal } from "../modals/ListModal";
 
 type AuctionManagerProps = {
   theme?: Partial<typeof Theme>;
@@ -43,6 +45,8 @@ export const AuctionManager = ({
     >
       <Fragment>
         <ManageModal />
+        <BidModal />
+        <ListModal />
         {children}
       </Fragment>
     </AuctionHouseHooksContext.Provider>

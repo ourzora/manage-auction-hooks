@@ -1,20 +1,24 @@
-import { useState, useCallback, Fragment } from "react";
+import { useState, useCallback, Fragment, useEffect } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 import { Auction } from "@zoralabs/zdk";
-import { isAddress } from "@ethersproject/address";
-import { parseEther } from "@ethersproject/units";
+import { formatEther, parseEther, parseUnits } from "@ethersproject/units";
 
 import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
 
 import { useAuctionInformation } from "../hooks/useAuctionInformation";
 import { useThemeConfig } from "../hooks/useThemeConfig";
-import { addressesMatch } from "../utils/addresses";
-import { useContractTransaction } from "../hooks/useContractTransaction";
 import { useEthAmountInput } from "../components/useEthAmountInput";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { MediaPreview } from "../components/MediaPreview";
+import { BigNumber, BigNumberish } from "ethers";
+import { getNextMinBid } from "../utils/bidInfo";
+
+const formatAmount = (text: string, amount: BigNumberish) => {
+  const formattedAmount = formatEther(amount);
+  return text.replace('%', formattedAmount);
+}
 
 const BidModalContent = ({
   auction,
@@ -23,14 +27,57 @@ const BidModalContent = ({
   auction: Auction;
   setError: (err: string | undefined) => void;
 }) => {
-  const { account } = useWeb3Wallet();
+  const { account, library } = useWeb3Wallet();
   const { getString } = useThemeConfig();
-  const { txInProgress } = useContractTransaction();
+  // const { txInProgress } = useContractTransaction();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
-  const { ethValue, input } = useEthAmountInput({
+
+  const [userBalance, setUserBalance] = useState<BigNumberish | undefined>(
+    undefined
+  );
+
+  const getBalance = useCallback(async () => {
+    if (library && account) {
+      setUserBalance(await library.getBalance(account));
+    }
+  }, [account, library]);
+  useEffect(() => {
+    getBalance();
+  }, [library, account]);
+
+  const getMinBid = () => {
+    const minBidAmount = auction.amount.gt(0)
+      ? getNextMinBid(auction.amount)
+      : auction.reservePrice || "0";
+
+    return minBidAmount;
+  };
+
+  const [minBid, setMinBid] = useState<BigNumberish | undefined>(getMinBid);
+
+  const { ethValue, input, setEthValue } = useEthAmountInput({
     hasMinPrecision: true,
-    label: getString("UPDATE_RESERVE_PRICE_PRICE_LABEL"),
+    label: getString("BID_AMOUNT_LABEL"),
   });
+
+  useEffect(() => {
+    setMinBid(getMinBid());
+    setEthValue(formatEther(getMinBid()));
+  }, [auction.amount]);
+
+  const bidTooLow =
+    auction.amount && minBid
+      ? BigNumber.from(parseUnits(ethValue || "0", 18))
+          .sub(BigNumber.from(minBid))
+          .lt("0")
+      : true;
+
+  const userHasEnough =
+    ethValue && userBalance
+      ? BigNumber.from(parseUnits(ethValue || "0", 18))
+          .sub(BigNumber.from(userBalance))
+          .lt("0")
+      : false;
 
   const handleBid = useCallback(async () => {
     setError(undefined);
@@ -47,25 +94,26 @@ const BidModalContent = ({
   }, [auctionHouse, auctionId, setError]);
 
   return (
-    <span>
-      {isAddress(account as any) &&
-      addressesMatch(account as string, auction.tokenOwner) ? (
-        <Fragment>
-          <h3>{getString("PLACE_BID_HEADER")}</h3>
-          <p>{getString("PLACE_BID_DESCRIPTION")}</p>
-          <div>
-            {input}
-            <Button onClick={handleBid} showPending={true}>
-              {txInProgress
-                ? getString("BUTTON_TXN_PENDING")
-                : getString("BID_BUTTON_TEXT")}
-            </Button>
-          </div>
-        </Fragment>
-      ) : (
-        <span>{getString("MODAL_MANAGE_NOT_OWNED")}</span>
-      )}
-    </span>
+    <Fragment>
+      <h3>{getString("PLACE_BID_HEADER")}</h3>
+      <p>{getString("PLACE_BID_DESCRIPTION")}</p>
+      <p>{auction.amount.eq(0) ? formatAmount(getString('RESERVE_PRICE_NOT_MET'), auction.reservePrice) : formatAmount(getString('SHOW_HIGHEST_BID'), auction.amount)}</p>
+      <div>
+        <div>
+          {input}
+        </div>
+        <div>
+          {!userHasEnough ? getString("BID_NOT_ENOUGH_ETH") : bidTooLow && formatAmount(getString("BID_TOO_LOW"), minBid)}
+        </div>
+        <Button
+          onClick={handleBid}
+          disabled={!userHasEnough || bidTooLow}
+          showPending={true}
+        >
+          {getString("BID_BUTTON_TEXT")}
+        </Button>
+      </div>
+    </Fragment>
   );
 };
 

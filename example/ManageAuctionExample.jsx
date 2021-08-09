@@ -25,11 +25,19 @@ const MediaRenderer = (props) => {
 }
 
 const ManageAuctionButton = () => {
-  const {openManageAuction, openBidAuction} = useManageAuction();
+  const {openManageAuction, openListAuction, openBidAuction} = useManageAuction();
       return (
-        <button onClick={() => {
-          openManageAuction(parseInt(prompt('Auction id?')));
-        }}>manage auction</button>
+        <Fragment>
+          <button onClick={() => {
+            openManageAuction(parseInt(prompt('Auction id?')));
+          }}>manage auction</button>
+          <button onClick={() => {
+            openBidAuction(parseInt(prompt('Auction id?')));
+          }}>bid auction</button>
+          <button onClick={() => {
+            openListAuction('0x152eeE3DCc5526efd646E9b45c9a9672BfFcc097', '103000097');
+          }}>list auction</button>
+        </Fragment>
       );
 }
 

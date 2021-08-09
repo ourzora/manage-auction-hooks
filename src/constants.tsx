@@ -41,6 +41,13 @@ export const Strings = {
   PLACE_BID_HEADER: "Place Bid",
   PLACE_BID_DESCRIPTION: "Place a bid on this piece",
 
+  BID_AMOUNT_LABEL: 'Bid Amount',
+
+  RESERVE_PRICE_NOT_MET: 'Reserve of % eth not met',
+  SHOW_HIGHEST_BID: 'Highest bid: % eth',
+  BID_NOT_ENOUGH_ETH: 'Not enough eth to bid',
+  BID_TOO_LOW: 'Bid is too low. Need to bid at least % eth',
+
   LIST_MEDIA_HEADER: "List media",
   LIST_MEDIA_DESCRIPTION: "List your work on the zora auction house",
   LIST_MEDIA_BUTTON_TEXT: "List",

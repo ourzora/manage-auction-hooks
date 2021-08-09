@@ -33,5 +33,5 @@ export const useEthAmountInput = ({
       />
     </label>
   );
-  return { input, ethValue };
+  return { input, ethValue, setEthValue };
 };
