@@ -1,5 +1,5 @@
 {
-  "name": "@zoralabs/auction-house-hooks",
+  "name": "@zoralabs/manage-auction-hooks",
   "version": "0.0.1",
   "description": "hooks to use auction house",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
     "prepack": "yarn clean && yarn run prettier && yarn run tsc",
     "clean": "rm -rf ./dist"
   },
-  "repository": "git@github.com:ourzora/auction-house-hooks.git",
+  "repository": "git@github.com:ourzora/manage-auction-hooks.git",
   "author": "Iain <iain@zora.co>",
   "license": "MIT",
   "dependencies": {
