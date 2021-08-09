@@ -87,7 +87,9 @@ export const BidModal = () => {
           <BidModalContent auction={auctionInfo} setError={setError} />
         </div>
       ) : (
-        <div {...getStyles('modalLoadingPrompt')}>{getString("MANAGE_MODAL_LOADING_PROMPT")}</div>
+        <div {...getStyles("modalLoadingPrompt")}>
+          {getString("MANAGE_MODAL_LOADING_PROMPT")}
+        </div>
       )}
     </ModalActionLayout>
   );

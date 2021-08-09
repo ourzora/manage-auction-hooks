@@ -22,13 +22,15 @@ export const Theme = {
   `,
   modalInner: css`
     background: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   `,
   modalHeader: css`
     font-size: 1.4em;
   `,
   modalDescription: css``,
   updateReserveContainer: css``,
-  manageModalWrapper: css``,
   modalSuccessMessage: css``,
   modalLoadingPrompt: css``,
   updateWarning: css``,

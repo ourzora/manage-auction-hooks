@@ -45,7 +45,7 @@ const ListModalContent = ({
   }
 
   return (
-    <div>
+    <div {...getStyles("modalInner")}>
       <h3 {...getStyles("modalHeader")}>{getString("LIST_MEDIA_HEADER")}</h3>
       <p {...getStyles("modalDescription")}>
         {getString("LIST_MEDIA_DESCRIPTION")}
