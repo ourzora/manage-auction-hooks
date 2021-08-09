@@ -38,9 +38,9 @@ export const useListInteraction = (
     auctionHouseAddress.auctionHouse
   );
 
-  const { handleTx: handleApproveTx, txInProgress: approveInProgress } =
+  const { handleTx: handleApproveTx, txStatus: approveTxStatus } =
     useContractTransaction(ActionType.APPROVE);
-  const { handleTx: handleListTx, txInProgress: listInProgress } =
+  const { handleTx: handleListTx, txStatus: listTxStatus } =
     useContractTransaction(ActionType.LIST);
 
   const { ethValue, input } = useEthAmountInput({
@@ -87,9 +87,9 @@ export const useListInteraction = (
 
   return {
     handleApprove,
-    approveInProgress,
+    approveTxStatus,
     handleCreateAuction,
-    listInProgress,
+    listTxStatus,
     owned,
     approved,
     input,

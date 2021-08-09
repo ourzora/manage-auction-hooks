@@ -6,6 +6,8 @@ import { Button } from "../components/Button";
 import { ListParamsType, ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useListInteraction } from "../hooks/useListInteraction";
+import { isConfirmed, isWaiting } from "../hooks/useContractTransaction";
+import { ActionCompletedView } from "../components/ActionCompletedView";
 
 const ListModalContent = ({
   setError,
@@ -24,8 +26,8 @@ const ListModalContent = ({
     input,
     handleCreateAuction,
     handleApprove,
-    listInProgress,
-    approveInProgress,
+    listTxStatus,
+    approveTxStatus,
   } = useListInteraction(setError, tokenContract, tokenId, listParams);
   const { getString, getStyles } = useThemeConfig();
 
@@ -38,6 +40,10 @@ const ListModalContent = ({
     );
   }
 
+  if (isConfirmed(listTxStatus) || isConfirmed(approveTxStatus)) {
+    return <ActionCompletedView />;
+  }
+
   return (
     <span>
       <Fragment>
@@ -48,8 +54,11 @@ const ListModalContent = ({
         {approved ? (
           <Fragment>
             {input}
-            <Button onClick={handleCreateAuction} disabled={listInProgress}>
-              {listInProgress
+            <Button
+              onClick={handleCreateAuction}
+              disabled={isWaiting(listTxStatus)}
+            >
+              {isWaiting(listTxStatus)
                 ? getString("BUTTON_TXN_PENDING")
                 : getString("LIST_MEDIA_BUTTON_TEXT")}
             </Button>
@@ -66,8 +75,11 @@ const ListModalContent = ({
               {getString("LIST_NFT_APPROVE_P2")}
             </p>
 
-            <Button onClick={handleApprove} disabled={approveInProgress}>
-              {approveInProgress
+            <Button
+              onClick={handleApprove}
+              disabled={isWaiting(approveTxStatus)}
+            >
+              {isWaiting(approveTxStatus)
                 ? getString("BUTTON_TXN_PENDING")
                 : getString("APPROVE_AUCTION_BUTTON_TEXT")}
             </Button>

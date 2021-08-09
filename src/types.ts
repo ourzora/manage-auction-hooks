@@ -44,7 +44,6 @@ export enum ActionType {
 export type ActionInfo = {
   type: ActionType;
   state: WalletCallStatus;
-  isWaiting: boolean;
   error?: Error;
 };
 

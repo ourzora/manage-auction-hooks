@@ -19,7 +19,7 @@ export const useBidInteraction = (
   const { account, library } = useWeb3Wallet();
   const { getString } = useThemeConfig();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
-  const { handleTx: handleBidTx, txInProgress: bidInProgress } =
+  const { handleTx: handleBidTx, txStatus: bidTxStatus } =
     useContractTransaction(ActionType.PLACE_BID);
 
   const [userBalance, setUserBalance] = useState<BigNumberish | undefined>(
@@ -87,7 +87,7 @@ export const useBidInteraction = (
 
   return {
     bidTooLow,
-    bidInProgress,
+    bidTxStatus,
     userHasEnough,
     input,
     minBid,

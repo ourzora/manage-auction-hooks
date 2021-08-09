@@ -11,6 +11,8 @@ import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContex
 import { MediaPreview } from "../components/MediaPreview";
 import { BigNumberish } from "ethers";
 import { useBidInteraction } from "../hooks/useBidInteraction";
+import { isConfirmed, isWaiting } from "../hooks/useContractTransaction";
+import { ActionCompletedView } from "../components/ActionCompletedView";
 
 const formatAmount = (text: string, amount: BigNumberish) => {
   const formattedAmount = formatEther(amount);
@@ -24,8 +26,12 @@ const BidModalContent = ({
   setError: (err: string | undefined) => void;
 }) => {
   const { getString, getStyles } = useThemeConfig();
-  const { input, userHasEnough, bidInProgress, minBid, bidTooLow, handleBid } =
+  const { input, userHasEnough, bidTxStatus, minBid, bidTooLow, handleBid } =
     useBidInteraction(auction, setError);
+
+  if (isConfirmed(bidTxStatus)) {
+    return <ActionCompletedView />;
+  }
 
   return (
     <Fragment>
@@ -51,9 +57,9 @@ const BidModalContent = ({
         </div>
         <Button
           onClick={handleBid}
-          disabled={!userHasEnough || bidTooLow || bidInProgress}
+          disabled={!userHasEnough || bidTooLow || isWaiting(bidTxStatus)}
         >
-          {bidInProgress
+          {isWaiting(bidTxStatus)
             ? getString("BUTTON_TXN_PENDING")
             : getString("BID_BUTTON_TEXT")}
         </Button>

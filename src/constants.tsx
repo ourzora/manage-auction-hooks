@@ -28,6 +28,8 @@ export const Theme = {
   `,
   modalDescription: css``,
   updateReserveContainer: css``,
+  modalSuccessMessage: css``,
+  updateWarning: css``,
 };
 
 export const Strings = {
@@ -69,6 +71,21 @@ export const Strings = {
   LIST_MODAL_NOT_OWNED: "Token not owned",
   LIST_MODAL_NOT_OWNED_TEXT:
     "To list this token on the auction house you need to be the owner.",
+
+  ACTION_APPROVE_CONFIRMED: "Confirmed for approval to sell on auction house",
+  ACTION_APPROVE_CONFIRMED_NEXT_TEXT: "Go back to list",
+
+  ACTION_LIST_CONFIRMED: "Your NFT has been listed on the auction house",
+  ACTION_CONFIRMED_NEXT_TEXT: "Close",
+
+  CONFIRMATION_CLOSE_MODAL_BUTTON_TEXT: "Close modal",
+
+  ACTION_PLACE_BID_CONFIRMED: "Your bid has been placed",
+  ACTION_UPDATE_RESERVE_CONFIRMED: "Your auction has a new reserve price",
+
+  ACTION_CANCELLED_CONFIRMED: "Your reserve auction has been cancelled.",
+
+  CONFIRMATION_BACK_BUTTON_TEXT: "Go back",
 
   MANAGE_MEDIA_HEADER: "Manage Media",
   CANCEL_AUCTION: (

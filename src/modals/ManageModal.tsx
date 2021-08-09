@@ -8,6 +8,8 @@ import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useManageInteraction } from "../hooks/useManageInteraction";
+import { isConfirmed, isWaiting } from "../hooks/useContractTransaction";
+import { ActionCompletedView } from "../components/ActionCompletedView";
 
 const ManageModalContent = ({
   auction,
@@ -23,9 +25,13 @@ const ManageModalContent = ({
     handleUpdateReservePrice,
     input,
     ethValue,
-    cancelInProgress,
-    setReserveInProgress,
+    cancelTxStatus,
+    setReserveTxStatus,
   } = useManageInteraction(auction, setError);
+
+  if (isConfirmed(cancelTxStatus) || isConfirmed(setReserveTxStatus)) {
+    return <ActionCompletedView />;
+  }
 
   return (
     <span>
@@ -37,8 +43,11 @@ const ManageModalContent = ({
           <p {...getStyles("modalDescription")}>
             {getString("CANCEL_AUCTION")}
           </p>
-          <Button onClick={handleCancelAuction} disabled={cancelInProgress}>
-            {cancelInProgress
+          <Button
+            onClick={handleCancelAuction}
+            disabled={isWaiting(cancelTxStatus)}
+          >
+            {isWaiting(cancelTxStatus)
               ? getString("BUTTON_TXN_PENDING")
               : getString("CANCEL_AUCTION_BUTTON_TEXT")}
           </Button>
@@ -50,9 +59,9 @@ const ManageModalContent = ({
             <div>
               <Button
                 onClick={handleUpdateReservePrice}
-                disabled={!ethValue || setReserveInProgress}
+                disabled={!ethValue || isWaiting(setReserveTxStatus)}
               >
-                {setReserveInProgress
+                {isWaiting(setReserveTxStatus)
                   ? getString("BUTTON_TXN_PENDING")
                   : getString("SET_RESERVE_PRICE_BUTTON_TEXT")}
               </Button>

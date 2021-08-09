@@ -3,6 +3,17 @@ import { ContractTransaction } from "@ethersproject/contracts";
 import { ActionType, WalletCallStatus } from "../types";
 import { TransactionActionContext } from "../context/TransactionActionContext";
 
+export function isWaiting(status: WalletCallStatus) {
+  return (
+    status === WalletCallStatus.CONFIRMING ||
+    status === WalletCallStatus.PROMPTED
+  );
+}
+
+export function isConfirmed(status: WalletCallStatus) {
+  return status === WalletCallStatus.CONFIRMED;
+}
+
 export function useContractTransaction(
   action: ActionType,
   confirmations: number = 1
@@ -16,38 +27,36 @@ export function useContractTransaction(
       setCurrentAction({
         state: WalletCallStatus.PROMPTED,
         type: action,
-        isWaiting: true,
       });
       const tx = await promise;
       setCurrentAction({
         state: WalletCallStatus.CONFIRMING,
         type: action,
-        isWaiting: true,
       });
       await tx.wait(confirmations);
       setCurrentAction({
         state: WalletCallStatus.CONFIRMED,
         type: action,
-        isWaiting: false,
       });
       afterActionCallback(action);
       // txn confirmed
       // todo reload page???
-      console.log('transaction completed');
+      console.log("transaction completed");
       return tx;
     } catch (e) {
       setCurrentAction({
         state: WalletCallStatus.ERRORED,
         type: action,
-        isWaiting: false,
         error: e.message,
       });
       throw e;
     }
   }
 
-  const txInProgress =
-    currentAction?.isWaiting && currentAction?.type === action;
+  const txStatus =
+    currentAction?.type === action
+      ? currentAction?.state
+      : WalletCallStatus.INITIAL;
 
-  return { txInProgress, handleTx };
+  return { txStatus, handleTx };
 }

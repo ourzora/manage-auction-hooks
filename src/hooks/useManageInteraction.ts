@@ -19,9 +19,9 @@ export const useManageInteraction = (
   const { account } = useWeb3Wallet();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
 
-  const { handleTx: handleCancelTx, txInProgress: cancelInProgress } =
+  const { handleTx: handleCancelTx, txStatus: cancelTxStatus } =
     useContractTransaction(ActionType.CANCEL_AUCTION);
-  const { handleTx: handleSetReserveTx, txInProgress: setReserveInProgress } =
+  const { handleTx: handleSetReserveTx, txStatus: setReserveTxStatus } =
     useContractTransaction(ActionType.UPDATE_RESERVE);
 
   const { ethValue, input } = useEthAmountInput({
@@ -70,9 +70,9 @@ export const useManageInteraction = (
   return {
     isTokenOwner,
     handleUpdateReservePrice,
-    setReserveInProgress,
+    setReserveTxStatus,
     handleCancelAuction,
-    cancelInProgress,
+    cancelTxStatus,
     input,
     ethValue,
   };
