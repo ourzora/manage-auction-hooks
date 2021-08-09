@@ -5,6 +5,7 @@ import { ReactElement } from "react";
 export type AuctionHouseHooksContextType = {
   theme: typeof Theme;
   strings: typeof Strings;
+  afterActionCallback: (_action: ActionType) => void;
   auctionId: number | null;
   setAuctionId: (auctionId: number | null) => void;
   listingRequestInformation: ListingRequestType | null;
@@ -31,4 +32,12 @@ export enum ModalType {
   LIST_MODAL = "AUCTION_HOUSE_LIST_MODAL",
   BID_MODAL = "AUCTION_HOUSE_BID_MODAL",
   MANAGE_MODAL = "AUCTION_HOUSE_MANAGE_MODAL",
+}
+
+export enum ActionType {
+  LIST = "LIST",
+  APPROVE = "APPROVE",
+  UPDATE_RESERVE = "UPDATE_RESERVE",
+  CANCEL_AUCTION = "CANCEL_AUCTION",
+  PLACE_BID = "PLACE_BID",
 }

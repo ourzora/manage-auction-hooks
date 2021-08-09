@@ -1,6 +1,9 @@
 import { useState, ReactNode, Fragment } from "react";
 import { AuctionHouse } from "@zoralabs/zdk";
-import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
+import {
+  useWalletModalState,
+  useWeb3Wallet,
+} from "@zoralabs/simple-wallet-provider";
 
 import { AuctionHouseHooksContext } from "../context/AuctionHouseHooksContext";
 import { Theme, Strings } from "../constants";
@@ -26,6 +29,7 @@ export const AuctionManager = ({
   const [listingRequestInformation, setListingRequestInformation] =
     useState<ListingRequestType>(null);
   const { library, chainId } = useWeb3Wallet();
+  const { closeModal } = useWalletModalState();
 
   return (
     <AuctionHouseHooksContext.Provider
@@ -37,6 +41,9 @@ export const AuctionManager = ({
         setListingRequestInformation,
         theme: Object.assign({}, Theme, theme),
         strings: Object.assign({}, Strings, strings),
+        afterActionCallback: () => {
+          closeModal();
+        },
         auctionHouse:
           library && chainId
             ? new AuctionHouse(library.getSigner(), chainId)

@@ -10,7 +10,7 @@ import { useThemeConfig } from "../hooks/useThemeConfig";
 import { useEthAmountInput } from "../components/useEthAmountInput";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { useTokenApproval } from "../hooks/useTokenApproval";
-import { ListParamsType } from "../types";
+import { ActionType, ListParamsType } from "../types";
 
 const DefaultListParams = {
   curatorAddress: AddressZero,
@@ -28,7 +28,7 @@ export const useListInteraction = (
 ) => {
   const { account, chainId } = useWeb3Wallet();
   const { getString } = useThemeConfig();
-  const { auctionHouse } = useAuctionHouseHooksContext();
+  const { auctionHouse, afterActionCallback } = useAuctionHouseHooksContext();
 
   const auctionHouseAddress = chainId === 1 ? mainnetAuction : rinkebyAuction;
   const { approved, owned, approve, loadApproval } = useTokenApproval(
@@ -58,6 +58,7 @@ export const useListInteraction = (
         listParams.currencyAddress,
         tokenContract
       );
+      afterActionCallback(ActionType.LIST);
     } catch (error) {
       console.error(error);
       setError(
@@ -70,6 +71,7 @@ export const useListInteraction = (
     try {
       await approve();
       await loadApproval();
+      afterActionCallback(ActionType.APPROVE);
     } catch (error) {
       setError(
         `${getString("ERROR_APPROVING_TOKEN_PREFIX")} ${error.messages}`
