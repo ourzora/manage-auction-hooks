@@ -34,7 +34,7 @@ const ManageModalContent = ({
   }
 
   return (
-    <span>
+    <div {...getStyles('manageModalWrapper')}>
       {isTokenOwner ? (
         <Fragment>
           <h3 {...getStyles("modalHeader")}>
@@ -69,9 +69,9 @@ const ManageModalContent = ({
           </div>
         </Fragment>
       ) : (
-        <span>{getString("MODAL_MANAGE_NOT_OWNED")}</span>
+        <div>{getString("MODAL_MANAGE_NOT_OWNED")}</div>
       )}
-    </span>
+    </div>
   );
 };
 
@@ -107,7 +107,7 @@ export const ManageModal = () => {
           <ManageModalContent auction={auctionInfo} setError={setError} />
         </div>
       ) : (
-        <span>{getString("MANAGE_MODAL_LOADING_PROMPT")}</span>
+        <div {...getStyles('modalLoadingPrompt')}>{getString("MANAGE_MODAL_LOADING_PROMPT")}</div>
       )}
     </ModalActionLayout>
   );

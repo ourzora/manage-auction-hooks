@@ -45,48 +45,43 @@ const ListModalContent = ({
   }
 
   return (
-    <span>
-      <Fragment>
-        <h3 {...getStyles("modalHeader")}>{getString("LIST_MEDIA_HEADER")}</h3>
-        <p {...getStyles("modalDescription")}>
-          {getString("LIST_MEDIA_DESCRIPTION")}
-        </p>
-        {approved ? (
-          <Fragment>
-            {input}
-            <Button
-              onClick={handleCreateAuction}
-              disabled={isWaiting(listTxStatus)}
-            >
-              {isWaiting(listTxStatus)
-                ? getString("BUTTON_TXN_PENDING")
-                : getString("LIST_MEDIA_BUTTON_TEXT")}
-            </Button>
-            <p {...getStyles("modalDescription")}>
-              {getString("SET_RESERVE_PRICE_DESCRIPTION")}
-            </p>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <p {...getStyles("modalDescription")}>
-              {getString("LIST_NFT_APPROVE_P1")}
-            </p>
-            <p {...getStyles("modalDescription")}>
-              {getString("LIST_NFT_APPROVE_P2")}
-            </p>
+    <div>
+      <h3 {...getStyles("modalHeader")}>{getString("LIST_MEDIA_HEADER")}</h3>
+      <p {...getStyles("modalDescription")}>
+        {getString("LIST_MEDIA_DESCRIPTION")}
+      </p>
+      {approved ? (
+        <Fragment>
+          {input}
+          <Button
+            onClick={handleCreateAuction}
+            disabled={isWaiting(listTxStatus)}
+          >
+            {isWaiting(listTxStatus)
+              ? getString("BUTTON_TXN_PENDING")
+              : getString("LIST_MEDIA_BUTTON_TEXT")}
+          </Button>
+          <p {...getStyles("modalDescription")}>
+            {getString("SET_RESERVE_PRICE_DESCRIPTION")}
+          </p>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <p {...getStyles("modalDescription")}>
+            {getString("LIST_NFT_APPROVE_P1")}
+          </p>
+          <p {...getStyles("modalDescription")}>
+            {getString("LIST_NFT_APPROVE_P2")}
+          </p>
 
-            <Button
-              onClick={handleApprove}
-              disabled={isWaiting(approveTxStatus)}
-            >
-              {isWaiting(approveTxStatus)
-                ? getString("BUTTON_TXN_PENDING")
-                : getString("APPROVE_AUCTION_BUTTON_TEXT")}
-            </Button>
-          </Fragment>
-        )}
-      </Fragment>
-    </span>
+          <Button onClick={handleApprove} disabled={isWaiting(approveTxStatus)}>
+            {isWaiting(approveTxStatus)
+              ? getString("BUTTON_TXN_PENDING")
+              : getString("APPROVE_AUCTION_BUTTON_TEXT")}
+          </Button>
+        </Fragment>
+      )}
+    </div>
   );
 };
 

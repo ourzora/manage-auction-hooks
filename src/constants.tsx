@@ -28,7 +28,9 @@ export const Theme = {
   `,
   modalDescription: css``,
   updateReserveContainer: css``,
+  manageModalWrapper: css``,
   modalSuccessMessage: css``,
+  modalLoadingPrompt: css``,
   updateWarning: css``,
 };
 

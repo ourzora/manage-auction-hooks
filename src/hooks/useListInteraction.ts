@@ -50,7 +50,8 @@ export const useListInteraction = (
 
   const handleCreateAuction = useCallback(async () => {
     setError(undefined);
-    if (!tokenContract || !tokenId || !auctionHouse || !ethValue || !account) {
+
+    if (!tokenContract || tokenId !== undefined || !auctionHouse || !ethValue || !account) {
       setError("No auction found");
       return;
     }
