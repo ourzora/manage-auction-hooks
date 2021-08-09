@@ -1,18 +1,19 @@
-import { useState, useContext, useCallback, Fragment } from "react";
+import { useState, useCallback, Fragment } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 import { Auction, AuctionHouse } from "@zoralabs/zdk";
 import { isAddress } from "@ethersproject/address";
+import { parseEther } from "@ethersproject/units";
+
 import { useWeb3Wallet } from "@zoralabs/simple-wallet-provider";
 
 import { useAuctionInformation } from "../hooks/useAuctionInformation";
 import { useThemeConfig } from "../hooks/useThemeConfig";
 import { addressesMatch } from "../utils/addresses";
-import { AuctionHouseHooksContext } from "../context/AuctionHouseHooksContext";
 import { useContractTransaction } from "../hooks/useContractTransaction";
 import { useEthAmountInput } from "../components/useEthAmountInput";
 import { Button } from "../components/Button";
 import { ModalType } from "../types";
-
+import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 
 const ManageModalContent = ({
   auction,
@@ -22,8 +23,8 @@ const ManageModalContent = ({
 }: {
   auction: Auction;
   setError: (err: string | undefined) => void;
-  auctionHouse: AuctionHouse,
-  auctionId: number,
+  auctionHouse: AuctionHouse;
+  auctionId: number;
 }) => {
   const { account } = useWeb3Wallet();
   const { getString } = useThemeConfig();
@@ -35,7 +36,6 @@ const ManageModalContent = ({
 
   const handleCancelAuction = useCallback(async () => {
     setError(undefined);
-    console.log({auctionHouse, auctionId})
     if (!auctionHouse || auctionId === null) {
       setError("No auction found");
       return;
@@ -44,7 +44,7 @@ const ManageModalContent = ({
       await auctionHouse?.cancelAuction(auctionId);
     } catch (error) {
       console.error(error);
-      setError(`Error cancelling auction: ${error}`);
+      setError(`Error cancelling auction: ${error.message}`);
     }
   }, [auctionHouse, auctionId, setError]);
 
@@ -54,18 +54,20 @@ const ManageModalContent = ({
       setError("No auction found");
       return;
     }
-    if (!ethValue) {
+    if (ethValue) {
+      try {
+        await auctionHouse?.setAuctionReservePrice(
+          auctionId,
+          parseEther(ethValue)
+        );
+      } catch (error) {
+        console.error(error);
+        setError(`Error cancelling auction: ${error.message}`);
+      }
+    } else {
       setError("Invalid reserve price");
     }
-    try {
-      await auctionHouse?.cancelAuction(auctionId);
-    } catch (error) {
-      console.error(error);
-      setError(`Error cancelling auction: ${error}`);
-    }
   }, [setError, auctionHouse, auctionId, ethValue]);
-
-  console.log({account, auction});
 
   return (
     <span>
@@ -82,15 +84,17 @@ const ManageModalContent = ({
           <p>{getString("SET_RESERVE_PRICE_DESCRIPTION")}</p>
           <div>
             {input}
-            <Button
-              onClick={handleUpdateReservePrice}
-              disabled={!ethValue}
-              showPending={true}
-            >
-              {txInProgress
-                ? getString("BUTTON_TXN_PENDING")
-                : getString("CANCEL_AUCTION_BUTTON_TEXT")}
-            </Button>
+            <div>
+              <Button
+                onClick={handleUpdateReservePrice}
+                disabled={!ethValue}
+                showPending={true}
+              >
+                {txInProgress
+                  ? getString("BUTTON_TXN_PENDING")
+                  : getString("SET_RESERVE_PRICE_BUTTON_TEXT")}
+              </Button>
+            </div>
           </div>
         </Fragment>
       ) : (
@@ -101,10 +105,23 @@ const ManageModalContent = ({
 };
 
 export const ManageModal = () => {
-  const { auctionHouse, auctionId} = useContext(AuctionHouseHooksContext);
-  const { getString } = useThemeConfig();
+  const { getString, getStyles } = useThemeConfig();
   const auctionInfo: Auction | undefined = useAuctionInformation();
   const [error, setError] = useState<string | undefined>(undefined);
+  const {
+    auctionHouse,
+    auctionId,
+    renderMedia: RenderMedia,
+  } = useAuctionHouseHooksContext();
+
+  const renderedMedia =
+    auctionInfo && RenderMedia ? (
+      <RenderMedia
+        auctionId={auctionId}
+        tokenContract={(auctionInfo as any)[1]?.toString()}
+        tokenId={(auctionInfo as any).tokenId?.toNumber()}
+      />
+    ) : undefined;
 
   return (
     <ModalActionLayout
@@ -114,8 +131,18 @@ export const ManageModal = () => {
       modalName={ModalType.MANAGE_MODAL as string}
     >
       {auctionInfo && auctionId && auctionHouse ? (
-        <ManageModalContent auctionHouse={auctionHouse} auctionId={auctionId} auction={auctionInfo} setError={setError} />
-      ) : <span>{getString('MANAGE_MODAL_LOADING_PROMPT')}</span>}
+        <div {...getStyles("modalInner")}>
+          {renderedMedia}
+          <ManageModalContent
+            auctionHouse={auctionHouse}
+            auctionId={auctionId}
+            auction={auctionInfo}
+            setError={setError}
+          />
+        </div>
+      ) : (
+        <span>{getString("MANAGE_MODAL_LOADING_PROMPT")}</span>
+      )}
     </ModalActionLayout>
   );
 };

@@ -18,13 +18,13 @@ export const useEthAmountInput = ({
   const { getStyles, getString } = useThemeConfig();
   const input = (
     <label>
-      {label}
+      <span {...getStyles("ethAmountLabel")}>{label}</span>
       <input
         type="number"
         step={
           hasMinPrecision ? getString("MIN_ETH_INPUT_PRECISION") : undefined
         }
-        value={ethValue}
+        value={ethValue || ""}
         {...(inputProps ? inputProps : getStyles("ethInput"))}
         onChange={(evt: ChangeEvent<HTMLInputElement>) => {
           evt.persist();

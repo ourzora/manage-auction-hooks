@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { AuctionHouseHooksContext } from "../config";
+import { AuctionHouseHooksContext } from "../context/AuctionHouseHooksContext";
 import { Auction } from "@zoralabs/zdk";
 
 export const useAuctionInformation = () => {

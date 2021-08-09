@@ -20,6 +20,10 @@ const ConnectTrigger = () => {
   );
 };
 
+const MediaRenderer = (props) => {
+  return <pre>{JSON.stringify(props, null, 2)}</pre>
+}
+
 const ManageAuctionButton = () => {
   const {openManageAuction, openBidAuction} = useManageAuction();
       return (
@@ -33,7 +37,7 @@ export const ManageAuctionExample = () => {
   return (
     <Web3ConfigProvider networkId={4} clientInfo={CLIENT_INFO}>
       <ConnectTrigger />
-      <AuctionManager>
+      <AuctionManager renderMedia={MediaRenderer}>
         <ManageAuctionButton />
       </AuctionManager>
     </Web3ConfigProvider>

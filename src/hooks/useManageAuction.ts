@@ -1,10 +1,10 @@
 import { useWalletModalState } from "@zoralabs/simple-wallet-provider";
-import { useContext } from "react";
-import { AuctionHouseHooksContext } from "../config";
 import { ModalType } from "../types";
+import { useAuctionHouseHooksContext } from "./useAuctionHouseHooksContext";
 
 export const useManageAuction = () => {
-  const { setAuctionId } = useContext(AuctionHouseHooksContext);
+  const { setAuctionId, setListingRequestInformation } =
+    useAuctionHouseHooksContext();
   const { closeModal, openModalByName } = useWalletModalState();
 
   const openManageAuction = (auctionId: number) => {
@@ -15,8 +15,8 @@ export const useManageAuction = () => {
     setAuctionId(auctionId);
     openModalByName(ModalType.BID_MODAL);
   };
-  const openListAuction = (auctionId: number) => {
-    setAuctionId(auctionId);
+  const openListAuction = (tokenContract: string, tokenId: string) => {
+    setListingRequestInformation({ tokenContract, tokenId });
     openModalByName(ModalType.LIST_MODAL);
   };
 
