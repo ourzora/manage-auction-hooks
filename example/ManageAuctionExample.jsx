@@ -2,13 +2,6 @@ import React, { Fragment } from "react";
 import { AuctionManager, useManageAuction } from "../src";
 import { Web3ConfigProvider, useWalletButton } from "@zoralabs/simple-wallet-provider";
 
-const CLIENT_INFO = {
-  name: "testing wallet connector",
-  url: "http://localhost:1234",
-  description: "testing wallet",
-  icons: [],
-};
-
 const ConnectTrigger = () => {
   const { buttonAction, actionText, connectedInfo } = useWalletButton();
 
@@ -43,7 +36,7 @@ const ManageAuctionButton = () => {
 
 export const ManageAuctionExample = () => {
   return (
-    <Web3ConfigProvider networkId={4} clientInfo={CLIENT_INFO}>
+    <Web3ConfigProvider networkId={1}>
       <ConnectTrigger />
       <AuctionManager renderMedia={MediaRenderer}>
         <ManageAuctionButton />

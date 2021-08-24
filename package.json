@@ -1,6 +1,6 @@
 {
   "name": "@zoralabs/manage-auction-hooks",
-  "version": "0.0.6",
+  "version": "0.0.10",
   "description": "hooks to use auction house",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -22,10 +22,13 @@
     "@ethersproject/providers": "^5.4.3",
     "@ethersproject/units": "^5.4.0",
     "@types/react": "^17.0.15",
-    "@zoralabs/simple-wallet-provider": "^0.0.4",
     "@zoralabs/zdk": "^1.2.3",
     "react": "^17.0.2",
+    "@zoralabs/simple-wallet-provider": "^0.0.7",
     "react-device-detect": "^1.17.0"
+  },
+  "peerDependencies": {
+    "@zoralabs/simple-wallet-provider": "^0.0.7"
   },
   "devDependencies": {
     "prettier": "^2.3.2",

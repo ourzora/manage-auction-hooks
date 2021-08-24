@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 import { Auction } from "@zoralabs/zdk";
 
@@ -25,6 +25,9 @@ const ManageModalContent = ({
     handleUpdateReservePrice,
     input,
     ethValue,
+    auctionHasEnded,
+    handleEndAuction,
+    endAuctionTxStatus,
     cancelTxStatus,
     setReserveTxStatus,
   } = useManageInteraction(auction, setError);
@@ -33,9 +36,29 @@ const ManageModalContent = ({
     return <ActionCompletedView />;
   }
 
+  console.log({isTokenOwner})
+  console.log({auctionHasEnded, auction})
+
   return (
     <div {...getStyles("modalInner")}>
-      {isTokenOwner ? (
+      {auctionHasEnded ? (
+        <Fragment>
+          <h3 {...getStyles("modalHeader")}>
+            {getString("SETTLE_AUCTION_HEADER")}
+          </h3>
+          <p {...getStyles("modalDescription")}>
+            {getString("SETTLE_AUCTION_DESCRIPTION")}
+          </p>
+          <Button
+            onClick={handleEndAuction}
+            disabled={isWaiting(endAuctionTxStatus)}
+          >
+            {isWaiting(endAuctionTxStatus)
+              ? getString("BUTTON_TXN_PENDING")
+              : getString("SETTLE_AUCTION_BUTTON_TEXT")}
+          </Button>
+        </Fragment>
+      ) : isTokenOwner ? (
         <Fragment>
           <h3 {...getStyles("modalHeader")}>
             {getString("MANAGE_MEDIA_HEADER")}
@@ -86,11 +109,14 @@ export const ManageModal = () => {
   } = useAuctionHouseHooksContext();
 
   const renderedMedia =
-    auctionInfo && RenderMedia ? (
+    auctionInfo &&
+    (auctionInfo as any)[1]?.toString() !==
+      "0x0000000000000000000000000000000000000000" &&
+    RenderMedia ? (
       <RenderMedia
         auctionId={auctionId}
         tokenContract={(auctionInfo as any)[1]?.toString()}
-        tokenId={(auctionInfo as any).tokenId?.toNumber()}
+        tokenId={(auctionInfo as any).tokenId?.toString()}
       />
     ) : undefined;
 

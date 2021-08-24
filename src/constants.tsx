@@ -91,6 +91,11 @@ export const Strings = {
 
   CONFIRMATION_BACK_BUTTON_TEXT: "Go back",
 
+  SETTLE_AUCTION_HEADER: "Settle Auction",
+  SETTLE_AUCTION_DESCRIPTION:
+    "Completes the auction by sending the NFT to the buyer and final bid to the seller.",
+  SETTLE_AUCTION_BUTTON_TEXT: "Settle Auction",
+
   MANAGE_MEDIA_HEADER: "Manage Media",
   CANCEL_AUCTION: (
     <Fragment>

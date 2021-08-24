@@ -39,6 +39,7 @@ export enum ActionType {
   UPDATE_RESERVE = "UPDATE_RESERVE",
   CANCEL_AUCTION = "CANCEL_AUCTION",
   PLACE_BID = "PLACE_BID",
+  END_AUCTION = "END_AUCTION",
 }
 
 export type ActionInfo = {

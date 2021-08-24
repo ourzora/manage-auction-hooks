@@ -19,10 +19,17 @@ export const useManageInteraction = (
   const { account } = useWeb3Wallet();
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
 
+  const auctionHasEnded =
+    auction.firstBidTime.gt("0") &&
+    new Date().getTime() / 1000 >
+      auction.firstBidTime.add(auction.duration).toNumber();
+
   const { handleTx: handleCancelTx, txStatus: cancelTxStatus } =
     useContractTransaction(ActionType.CANCEL_AUCTION);
   const { handleTx: handleSetReserveTx, txStatus: setReserveTxStatus } =
     useContractTransaction(ActionType.UPDATE_RESERVE);
+  const { handleTx: handleEndAuctionTx, txStatus: endAuctionTxStatus } =
+    useContractTransaction(ActionType.END_AUCTION);
 
   const { ethValue, input } = useEthAmountInput({
     hasMinPrecision: true,
@@ -41,7 +48,21 @@ export const useManageInteraction = (
       console.error(error);
       setError(`Error cancelling auction: ${error.message}`);
     }
-  }, [auctionHouse, auctionId, setError]);
+  }, [auctionHouse, auctionId, setError, handleCancelTx]);
+
+  const handleEndAuction = useCallback(async () => {
+    setError(undefined);
+    if (!auctionHouse || auctionId === null) {
+      setError("No auction found");
+      return;
+    }
+    try {
+      await handleEndAuctionTx(auctionHouse?.endAuction(auctionId));
+    } catch (error) {
+      console.error(error);
+      setError(`Error ending auction: ${error.message}`);
+    }
+  }, [auctionHouse, auctionId, setError, handleEndAuctionTx]);
 
   const handleUpdateReservePrice = useCallback(async () => {
     setError(undefined);
@@ -68,12 +89,15 @@ export const useManageInteraction = (
     addressesMatch(account as string, auction.tokenOwner);
 
   return {
-    isTokenOwner,
-    handleUpdateReservePrice,
-    setReserveTxStatus,
-    handleCancelAuction,
+    auctionHasEnded,
     cancelTxStatus,
-    input,
+    endAuctionTxStatus,
     ethValue,
+    handleCancelAuction,
+    handleEndAuction,
+    handleUpdateReservePrice,
+    input,
+    isTokenOwner,
+    setReserveTxStatus,
   };
 };
