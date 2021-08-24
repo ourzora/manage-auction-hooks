@@ -95,6 +95,7 @@ export const Strings = {
   SETTLE_AUCTION_DESCRIPTION:
     "Completes the auction by sending the NFT to the buyer and final bid to the seller.",
   SETTLE_AUCTION_BUTTON_TEXT: "Settle Auction",
+  AUCTION_END_CONFIRMED: "The auction has been settled",
 
   MANAGE_MEDIA_HEADER: "Manage Media",
   CANCEL_AUCTION: (

@@ -34,6 +34,10 @@ export const ActionCompletedView = () => {
         text: getString("ACTION_CANCELLED_CONFIRMED"),
         allowBack: false,
       },
+      [ActionType.END_AUCTION]: {
+        text: getString("AUCTION_END_CONFIRMED"),
+        allowBack: false,
+      },
       DEFAULT: {
         text: "",
         allowBack: false,

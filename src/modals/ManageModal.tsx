@@ -1,4 +1,4 @@
-import { useState, Fragment, useEffect } from "react";
+import { useState, Fragment } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 import { Auction } from "@zoralabs/zdk";
 
@@ -36,8 +36,8 @@ const ManageModalContent = ({
     return <ActionCompletedView />;
   }
 
-  console.log({isTokenOwner})
-  console.log({auctionHasEnded, auction})
+  console.log({ isTokenOwner });
+  console.log({ auctionHasEnded, auction });
 
   return (
     <div {...getStyles("modalInner")}>
