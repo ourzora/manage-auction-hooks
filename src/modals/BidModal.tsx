@@ -47,8 +47,8 @@ const BidModalContent = ({
             )
           : formatAmount(getString("SHOW_HIGHEST_BID"), auction.amount)}
       </p>
-      <div>
-        <div>{input}</div>
+      <div {...getStyles("modalBidActionContainer")}>
+        <p>{input}</p>
         <div>
           {!userHasEnough
             ? getString("BID_NOT_ENOUGH_ETH")
@@ -77,7 +77,7 @@ export const BidModal = () => {
   return (
     <ModalActionLayout
       error={error}
-      modalTitle={getString("MODAL_TITLE_MANAGE_LISTING")}
+      modalTitle={getString("MODAL_TITLE_BID_PIECE")}
       modalDescription={getString("MODAL_DESCRIPTION_MANAGE_LISTING")}
       modalName={ModalType.BID_MODAL as string}
     >

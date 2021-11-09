@@ -92,7 +92,9 @@ const ManageModalContent = ({
           </div>
         </Fragment>
       ) : (
-        <div>{getString("MODAL_MANAGE_NOT_OWNED")}</div>
+        <div {...getStyles("modalManageMissingOwnershipMessage")}>
+          {getString("MODAL_MANAGE_NOT_OWNED")}
+        </div>
       )}
     </div>
   );

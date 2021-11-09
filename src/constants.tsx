@@ -11,10 +11,23 @@ export const Theme = {
     font-size: 1.2em;
   `,
   actionButton: css`
-    font-family: inherit;
-    padding: 4px;
-    font-size: 1.2em;
     margin-top: 12px;
+    padding: 12px 18px;
+    font-family: inherit;
+    font-size: 1.2em;
+    background: #ddd;
+    border-radius: 4px;
+    transition: background 0.32s ease-in;
+    cursor: pointer;
+    border: 0;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      background: #aaa;
+    }
   `,
   ethAmountLabel: css`
     margin: 4px;
@@ -29,11 +42,21 @@ export const Theme = {
   modalHeader: css`
     font-size: 1.4em;
   `,
+  modalBidActionContainer: css`
+    padding-bottom: 15px; 
+  `,
   modalDescription: css``,
   updateReserveContainer: css``,
   modalSuccessMessage: css``,
-  modalLoadingPrompt: css``,
+  modalLoadingPrompt: css`
+    padding: 20px;
+  `,
+  modalBidButton: css`
+  `,
   updateWarning: css``,
+  modalManageMissingOwnershipMessage: css`
+    padding: 20px;
+  `,
 };
 
 export const Strings = {
