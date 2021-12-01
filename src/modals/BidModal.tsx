@@ -74,6 +74,8 @@ export const BidModal = () => {
   const [error, setError] = useState<string | undefined>(undefined);
   const { auctionHouse, auctionId } = useAuctionHouseHooksContext();
 
+  console.log(auctionInfo);
+
   return (
     <ModalActionLayout
       error={error}
@@ -83,7 +85,11 @@ export const BidModal = () => {
     >
       {auctionInfo && auctionId && auctionHouse ? (
         <div {...getStyles("modalInner")}>
-          <MediaPreview auction={auctionInfo} />
+          <MediaPreview
+            tokenId={(auctionInfo as any)[0].toString()}
+            tokenContract={(auctionInfo as any)[1].toString()}
+            auctionId={auctionId}
+          />
           <BidModalContent auction={auctionInfo} setError={setError} />
         </div>
       ) : (

@@ -1,14 +1,17 @@
-import { Auction } from "@zoralabs/zdk";
-
+import { MediaPreviewType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 
-export const MediaPreview = ({ auction }: { auction: Auction }) => {
+export const MediaPreview = ({
+  tokenContract,
+  tokenId,
+  auctionId,
+}: MediaPreviewType) => {
   const { renderMedia: RenderMedia } = useAuctionHouseHooksContext();
-  return auction && RenderMedia ? (
+  return tokenContract && tokenId && RenderMedia ? (
     <RenderMedia
-      auctionId={(auction as any)[0].toNumber()}
-      tokenContract={(auction as any)[1]?.toString()}
-      tokenId={(auction as any).tokenId?.toNumber()}
+      auctionId={auctionId}
+      tokenContract={tokenContract}
+      tokenId={tokenId}
     />
   ) : null;
 };

@@ -43,7 +43,7 @@ export const Theme = {
     font-size: 1.4em;
   `,
   modalBidActionContainer: css`
-    padding-bottom: 15px; 
+    padding-bottom: 15px;
   `,
   modalDescription: css``,
   updateReserveContainer: css``,
@@ -51,8 +51,7 @@ export const Theme = {
   modalLoadingPrompt: css`
     padding: 20px;
   `,
-  modalBidButton: css`
-  `,
+  modalBidButton: css``,
   updateWarning: css``,
   modalManageMissingOwnershipMessage: css`
     padding: 20px;
