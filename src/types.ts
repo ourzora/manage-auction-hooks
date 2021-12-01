@@ -27,6 +27,12 @@ export type ListingRequestType = null | {
   tokenId: string;
 };
 
+export type MediaPreviewType = {
+  tokenContract: string;
+  tokenId: string;
+  auctionId?: number;
+};
+
 export enum ModalType {
   LIST_MODAL = "AUCTION_HOUSE_LIST_MODAL",
   BID_MODAL = "AUCTION_HOUSE_BID_MODAL",
