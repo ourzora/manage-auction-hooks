@@ -13,7 +13,6 @@ import { isConfirmed, isWaiting } from "../hooks/useContractTransaction";
 import { ActionCompletedView } from "../components/ActionCompletedView";
 import { formatAmount } from "../utils/formatAmount";
 
-
 const BidModalContent = ({
   auction,
   setError,
@@ -28,7 +27,7 @@ const BidModalContent = ({
   if (isConfirmed(bidTxStatus)) {
     return <ActionCompletedView />;
   }
-   
+
   const canBid = userHasEnough && !bidTooLow;
 
   return (
@@ -47,23 +46,33 @@ const BidModalContent = ({
       </p>
       <div {...getStyles("modalBidActionContainer")}>
         <p>{input}</p>
-        <p {...getStyles("bidDisclaimerLine")}>{formatAmount('You must bid at least %.', minBid as string)}</p>
-        <p {...getStyles("bidDisclaimerLine")}>The next bid must be 5% more than the current bid.</p>
+        <p {...getStyles("bidDisclaimerLine")}>
+          {formatAmount("You must bid at least %.", minBid as string)}
+        </p>
+        <p {...getStyles("bidDisclaimerLine")}>
+          The next bid must be 5% more than the current bid.
+        </p>
         <div>
           {!userHasEnough
             ? getString("BID_NOT_ENOUGH_ETH")
             : bidTooLow &&
               formatAmount(getString("BID_TOO_LOW"), minBid as string)}
         </div>
-        <Button
-          onClick={handleBid}
-          disabled={!canBid || isWaiting(bidTxStatus)}
-        >
-          {isWaiting(bidTxStatus)
-            ? getString("BUTTON_TXN_PENDING")
-            : getString("BID_BUTTON_TEXT")}
-        </Button>
-        {canBid && <p>You cannot withdraw a bid once submitted.</p>}
+        <p>
+          <Button
+            onClick={handleBid}
+            disabled={!canBid || isWaiting(bidTxStatus)}
+          >
+            {isWaiting(bidTxStatus)
+              ? getString("BUTTON_TXN_PENDING")
+              : getString("BID_BUTTON_TEXT")}
+          </Button>
+        </p>
+        {canBid && (
+          <p {...getStyles("bidDisclaimerLine")}>
+            {getString("WITHDRAW_DISCLAIMER")}
+          </p>
+        )}
       </div>
     </Fragment>
   );
