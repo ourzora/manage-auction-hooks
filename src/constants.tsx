@@ -120,6 +120,8 @@ export const Strings = {
   BID_NOT_ENOUGH_ETH: "You do not have enough ether to bid.",
   BID_TOO_LOW: "Bid is too low. Need to bid at least %",
 
+  WITHDRAW_DISCLAIMER: "You cannot withdraw a bid once submitted.",
+
   LIST_MEDIA_HEADER: "List media",
   LIST_MEDIA_DESCRIPTION: "List your work on the zora auction house",
   LIST_MEDIA_BUTTON_TEXT: "List",
