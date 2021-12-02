@@ -9,6 +9,7 @@ export const Theme = {
     font-family: inherit;
     padding: 4px;
     font-size: 1.2em;
+    width: 100%;
   `,
   actionButton: css`
     margin-top: 12px;
@@ -29,9 +30,46 @@ export const Theme = {
       background: #aaa;
     }
   `,
+  ethInputWrapper: css`
+    box-sizing: border-box;
+    /*margin: 0px 0px 10px;*/
+    min-width: 0px;
+    position: relative;
+    width: 100%;
+  `,
+  ethBalance: css`
+    opacity: 0.8;
+    span {
+      opacity: 1;
+    }
+  `,
+  inputEthLabel: css`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  `,
+  ethLabel: css`
+    box-sizing: border-box;
+    margin: 0px;
+    min-width: 0px;
+    line-height: 1.42857;
+    font-weight: 600;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 30px;
+  `,
+  bidDisclaimerLine: css`
+    opacity: 0.8;
+    text-size: 0.9em;
+  `,
   ethAmountLabel: css`
     margin: 4px;
     display: block;
+  `,
+  ethAmount: css`
+    opacity; 1;
+    font-weight: 500;
   `,
   modalInner: css`
     background: white;
@@ -75,12 +113,12 @@ export const Strings = {
   PLACE_BID_HEADER: "Place Bid",
   PLACE_BID_DESCRIPTION: "Place a bid on this piece",
 
-  BID_AMOUNT_LABEL: "Bid Amount",
+  BID_AMOUNT_LABEL: "Your bid amount",
 
-  RESERVE_PRICE_NOT_MET: "Reserve of % eth not met",
-  SHOW_HIGHEST_BID: "Highest bid: % eth",
-  BID_NOT_ENOUGH_ETH: "Not enough eth to bid",
-  BID_TOO_LOW: "Bid is too low. Need to bid at least % eth",
+  RESERVE_PRICE_NOT_MET: "Reserve of % not met",
+  SHOW_HIGHEST_BID: "Current highest bid: %",
+  BID_NOT_ENOUGH_ETH: "You do not have enough ether to bid.",
+  BID_TOO_LOW: "Bid is too low. Need to bid at least %",
 
   LIST_MEDIA_HEADER: "List media",
   LIST_MEDIA_DESCRIPTION: "List your work on the zora auction house",

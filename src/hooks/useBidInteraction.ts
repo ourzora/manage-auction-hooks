@@ -48,6 +48,9 @@ export const useBidInteraction = (
   const { ethValue, input, setEthValue } = useEthAmountInput({
     hasMinPrecision: true,
     label: getString("BID_AMOUNT_LABEL"),
+    userBalance: userBalance
+      ? BigNumber.from(userBalance).toString()
+      : undefined,
   });
 
   useEffect(() => {

@@ -1,7 +1,6 @@
 import { useState, Fragment } from "react";
 import { ModalActionLayout } from "@zoralabs/simple-wallet-provider/dist/modal/ModalActionLayout";
 import { Auction } from "@zoralabs/zdk";
-import { formatEther } from "@ethersproject/units";
 
 import { useAuctionInformation } from "../hooks/useAuctionInformation";
 import { useThemeConfig } from "../hooks/useThemeConfig";
@@ -9,15 +8,12 @@ import { Button } from "../components/Button";
 import { ModalType } from "../types";
 import { useAuctionHouseHooksContext } from "../hooks/useAuctionHouseHooksContext";
 import { MediaPreview } from "../components/MediaPreview";
-import { BigNumberish } from "ethers";
 import { useBidInteraction } from "../hooks/useBidInteraction";
 import { isConfirmed, isWaiting } from "../hooks/useContractTransaction";
 import { ActionCompletedView } from "../components/ActionCompletedView";
+import { formatAmount } from "../utils/formatAmount";
 
-const formatAmount = (text: string, amount: BigNumberish) => {
-  const formattedAmount = formatEther(amount);
-  return text.replace("%", formattedAmount);
-};
+
 const BidModalContent = ({
   auction,
   setError,
@@ -32,6 +28,8 @@ const BidModalContent = ({
   if (isConfirmed(bidTxStatus)) {
     return <ActionCompletedView />;
   }
+   
+  const canBid = userHasEnough && !bidTooLow;
 
   return (
     <Fragment>
@@ -49,6 +47,8 @@ const BidModalContent = ({
       </p>
       <div {...getStyles("modalBidActionContainer")}>
         <p>{input}</p>
+        <p {...getStyles("bidDisclaimerLine")}>{formatAmount('You must bid at least %.', minBid as string)}</p>
+        <p {...getStyles("bidDisclaimerLine")}>The next bid must be 5% more than the current bid.</p>
         <div>
           {!userHasEnough
             ? getString("BID_NOT_ENOUGH_ETH")
@@ -57,12 +57,13 @@ const BidModalContent = ({
         </div>
         <Button
           onClick={handleBid}
-          disabled={!userHasEnough || bidTooLow || isWaiting(bidTxStatus)}
+          disabled={!canBid || isWaiting(bidTxStatus)}
         >
           {isWaiting(bidTxStatus)
             ? getString("BUTTON_TXN_PENDING")
             : getString("BID_BUTTON_TEXT")}
         </Button>
+        {canBid && <p>You cannot withdraw a bid once submitted.</p>}
       </div>
     </Fragment>
   );
