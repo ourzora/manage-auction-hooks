@@ -23,13 +23,13 @@
     "@ethersproject/providers": "^5.4.3",
     "@ethersproject/units": "^5.4.0",
     "@types/react": "^17.0.15",
-    "@zoralabs/simple-wallet-provider": "^0.0.9",
+    "@zoralabs/simple-wallet-provider": "^0.1.1",
     "@zoralabs/zdk": "^1.2.3",
     "react": "^17.0.2",
     "react-device-detect": "^1.17.0"
   },
   "peerDependencies": {
-    "@zoralabs/simple-wallet-provider": "^0.0.9"
+    "@zoralabs/simple-wallet-provider": "^0.1.1"
   },
   "devDependencies": {
     "prettier": "^2.3.2",
