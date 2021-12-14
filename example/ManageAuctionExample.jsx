@@ -28,7 +28,9 @@ const ManageAuctionButton = () => {
             openBidAuction(parseInt(prompt('Auction id?')));
           }}>bid auction</button>
           <button onClick={() => {
-            openListAuction('0x152eeE3DCc5526efd646E9b45c9a9672BfFcc097', '103000097');
+            const contract = prompt('contract?');
+            const id = prompt('id');
+            openListAuction(contract, id);
           }}>list auction</button>
         </Fragment>
       );
@@ -36,7 +38,7 @@ const ManageAuctionButton = () => {
 
 export const ManageAuctionExample = () => {
   return (
-    <Web3ConfigProvider networkId={1}>
+    <Web3ConfigProvider networkId={4}>
       <ConnectTrigger />
       <AuctionManager renderMedia={MediaRenderer}>
         <ManageAuctionButton />

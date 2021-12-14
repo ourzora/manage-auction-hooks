@@ -47,6 +47,7 @@ export const Theme = {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding-bottom: 6px;
   `,
   ethLabel: css`
     box-sizing: border-box;
@@ -64,7 +65,6 @@ export const Theme = {
     text-size: 0.9em;
   `,
   ethAmountLabel: css`
-    margin: 4px;
     display: block;
   `,
   ethAmount: css`
@@ -76,6 +76,8 @@ export const Theme = {
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 15px;
+    max-width: 600px;
   `,
   modalHeader: css`
     font-size: 1.4em;
@@ -123,7 +125,7 @@ export const Strings = {
   WITHDRAW_DISCLAIMER: "You cannot withdraw a bid once submitted.",
 
   LIST_MEDIA_HEADER: "List media",
-  LIST_MEDIA_DESCRIPTION: "List your work on the zora auction house",
+  LIST_MEDIA_DESCRIPTION: "List your NFT for Auction",
   LIST_MEDIA_BUTTON_TEXT: "List",
   LIST_SET_RESERVE_PRICE_LABEL: "Set reserve price",
 
@@ -138,7 +140,7 @@ export const Strings = {
   LIST_MODAL_NOT_OWNED_TEXT:
     "To list this token on the auction house you need to be the owner.",
 
-  ACTION_APPROVE_CONFIRMED: "Confirmed for approval to sell on auction house",
+  ACTION_APPROVE_CONFIRMED: "Approval to sell your NFT has been confirmed.",
   ACTION_APPROVE_CONFIRMED_NEXT_TEXT: "Go back to list",
 
   ACTION_LIST_CONFIRMED: "Your NFT has been listed on the auction house",
@@ -175,6 +177,8 @@ export const Strings = {
   MANAGE_MODAL_LOADING_PROMPT: "Loading auction...",
   SET_RESERVE_PRICE_BUTTON_TEXT: "Set new reserve price",
 
-  LIST_NFT_APPROVE_P1: "To list this NFT, it first needs to be approved by ",
-  LIST_NFT_APPROVE_P2: "the Zora auction house",
+  LIST_NFT_APPROVE_P1:
+    "To list this NFT, the auction house contract needs access to transfer the NFT.",
+  ACTION_LIST_CHANGES_WARNING_TIME:
+    "The auction site may take up to 5 mins to reflect updates on the blockchain.",
 };
