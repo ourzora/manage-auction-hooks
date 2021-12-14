@@ -51,7 +51,7 @@ export const ActionCompletedView = () => {
     <div {...getStyles("modalSuccessMessage")}>
       {actionMessage.text}
       <p {...getStyles("updateWarning")}>
-        {getString('ACTION_LIST_CHANGES_WARNING_TIME')}
+        {getString("ACTION_LIST_CHANGES_WARNING_TIME")}
       </p>
       {actionMessage.allowBack ? (
         <Button onClick={() => setCurrentAction(null)}>
