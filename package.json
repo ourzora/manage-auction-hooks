@@ -12,7 +12,8 @@
     "build": "yarn run prepack",
     "prettier": "prettier src --write",
     "prepack": "yarn clean && yarn run prettier && yarn run tsc",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "example": "npx parcel example/index.html"
   },
   "repository": "git@github.com:ourzora/manage-auction-hooks.git",
   "author": "Iain <iain@zora.co>",
@@ -28,7 +29,7 @@
     "react-device-detect": "^1.17.0"
   },
   "peerDependencies": {
-    "@zoralabs/simple-wallet-provider": "^0.0.7"
+    "@zoralabs/simple-wallet-provider": "^0.0.9"
   },
   "devDependencies": {
     "prettier": "^2.3.2",

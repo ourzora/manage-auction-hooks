@@ -51,7 +51,7 @@ export const ActionCompletedView = () => {
     <div {...getStyles("modalSuccessMessage")}>
       {actionMessage.text}
       <p {...getStyles("updateWarning")}>
-        Changes to the site may take ~5 mins to be synced with the blockchain.
+        {getString('ACTION_LIST_CHANGES_WARNING_TIME')}
       </p>
       {actionMessage.allowBack ? (
         <Button onClick={() => setCurrentAction(null)}>

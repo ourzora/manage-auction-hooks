@@ -70,9 +70,6 @@ const ListModalContent = ({
           <p {...getStyles("modalDescription")}>
             {getString("LIST_NFT_APPROVE_P1")}
           </p>
-          <p {...getStyles("modalDescription")}>
-            {getString("LIST_NFT_APPROVE_P2")}
-          </p>
 
           <Button onClick={handleApprove} disabled={isWaiting(approveTxStatus)}>
             {isWaiting(approveTxStatus)
