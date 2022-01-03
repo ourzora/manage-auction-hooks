@@ -112,6 +112,9 @@ export const Strings = {
   MODAL_TITLE_BID_PIECE: "Place Bid",
   MODAL_DESCRIPTION_BID_PIECE: "Modal to place a bid on a NFT",
 
+  MODAL_TITLE_CREATE_ASK: "Set a Buy Now Price",
+  MODAL_DESCRIPTION_CREATE_ASK: "Modal to set a buy now price for an NFT",
+
   PLACE_BID_HEADER: "Place Bid",
   PLACE_BID_DESCRIPTION: "Place a bid on this piece",
 

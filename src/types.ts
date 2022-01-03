@@ -13,6 +13,14 @@ export type AuctionHouseHooksContextType = {
   renderMedia?: RenderMediaType;
 };
 
+export type AsksHooksContextType = {
+  theme: typeof Theme;
+  strings: typeof Strings;
+  askRequestInformation: ListingRequestType | null;
+  setCreateAskInformation: (set: ListingRequestType) => void;
+  renderMedia?: RenderMediaType;
+};
+
 export type ListParamsType = {
   curatorAddress: string;
   curatorPercentage: number;
@@ -37,6 +45,7 @@ export enum ModalType {
   LIST_MODAL = "AUCTION_HOUSE_LIST_MODAL",
   BID_MODAL = "AUCTION_HOUSE_BID_MODAL",
   MANAGE_MODAL = "AUCTION_HOUSE_MANAGE_MODAL",
+  CREATE_ASK_MODAL = "ASKS_CREATE_ASK_MODAL",
 }
 
 export enum ActionType {

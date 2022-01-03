@@ -5,6 +5,7 @@ import { useAuctionHouseHooksContext } from "./useAuctionHouseHooksContext";
 export const useManageAuction = () => {
   const { setAuctionId, setListingRequestInformation } =
     useAuctionHouseHooksContext();
+  
   const { closeModal, openModalByName } = useWalletModalState();
 
   const openManageAuction = (auctionId: number) => {
